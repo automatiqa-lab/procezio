@@ -1,0 +1,43 @@
+name: Release
+
+# Push a tag like v0.1.0 to cut a release: CI's Definition of Done runs, the static app is
+# built, and the bundle is attached to a GitHub release. Publishing the release then
+# triggers the SBOM workflow.
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 20
+
+      - name: Enable pnpm via corepack
+        run: corepack enable
+
+      - name: Install (frozen lockfile)
+        run: corepack pnpm install --frozen-lockfile
+
+      - name: Definition of Done (full gate suite)
+        run: corepack pnpm run ci:all
+
+      - name: Build the Solo app
+        run: corepack pnpm --filter @procezio/app run build
+
+      - name: Package the static build
+        run: tar -czf procezio-solo-${{ github.ref_name }}.tar.gz -C app/dist .
+
+      - name: Create the release
+        uses: softprops/action-gh-release@v3
+        with:
+          generate_release_notes: true
+          files: procezio-solo-${{ github.ref_name }}.tar.gz

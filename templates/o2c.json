@@ -1,0 +1,59 @@
+{
+  "id": "o2c",
+  "name": "Order-to-Cash (O2C)",
+  "description": "A customer order through credit, fulfilment, invoicing and collection. Understand zones are seeded; Diverge and Converge are left empty so the ideas are yours.",
+  "frame": {
+    "name": "Order-to-Cash",
+    "trigger": "A customer places an order",
+    "end_state": "Cash is received and the order is closed",
+    "owner": "Sales and Finance",
+    "frequency": "daily",
+    "volume": "~900 orders per month",
+    "north_star": "Days sales outstanding - order to cash received"
+  },
+  "nodes": [
+    { "id": "o2c-start", "type": "Start", "lane": "Customer", "label": "Order placed" },
+    { "id": "o2c-enter", "type": "Step", "lane": "Sales", "label": "Enter order" },
+    { "id": "o2c-credit", "type": "Decision", "lane": "Finance", "label": "Credit OK?" },
+    { "id": "o2c-hold", "type": "Wait", "lane": "Finance", "label": "Credit hold" },
+    { "id": "o2c-pick", "type": "Step", "lane": "Fulfilment", "label": "Pick and pack" },
+    { "id": "o2c-ship", "type": "Step", "lane": "Fulfilment", "label": "Ship order" },
+    { "id": "o2c-invoice", "type": "Step", "lane": "Finance", "label": "Raise invoice" },
+    { "id": "o2c-collect", "type": "Step", "lane": "Finance", "label": "Collect payment" },
+    { "id": "o2c-end", "type": "End", "lane": "Finance", "label": "Cash received" }
+  ],
+  "edges": [
+    { "id": "o2c-e1", "from": "o2c-start", "to": "o2c-enter", "kind": "sequence" },
+    { "id": "o2c-e2", "from": "o2c-enter", "to": "o2c-credit", "kind": "sequence" },
+    { "id": "o2c-e3", "from": "o2c-credit", "to": "o2c-hold", "kind": "sequence", "label": "no" },
+    { "id": "o2c-e4", "from": "o2c-hold", "to": "o2c-credit", "kind": "sequence" },
+    { "id": "o2c-e5", "from": "o2c-credit", "to": "o2c-pick", "kind": "sequence", "label": "yes" },
+    { "id": "o2c-e6", "from": "o2c-pick", "to": "o2c-ship", "kind": "sequence" },
+    { "id": "o2c-e7", "from": "o2c-ship", "to": "o2c-invoice", "kind": "sequence" },
+    { "id": "o2c-e8", "from": "o2c-invoice", "to": "o2c-collect", "kind": "sequence" },
+    { "id": "o2c-e9", "from": "o2c-collect", "to": "o2c-end", "kind": "sequence" }
+  ],
+  "audit_tags": [
+    {
+      "id": "o2c-a1",
+      "node_id": "o2c-credit",
+      "data": "structured",
+      "rules": "explicit",
+      "exceptions": "occasional"
+    }
+  ],
+  "friction": [
+    {
+      "id": "o2c-f1",
+      "node_id": "o2c-hold",
+      "waste": "Waiting",
+      "note": "Orders sit on credit hold while finance and sales reconcile limits by email."
+    },
+    {
+      "id": "o2c-f2",
+      "node_id": "o2c-collect",
+      "waste": "Motion",
+      "note": "Collections chase the same accounts every month with no shared ledger."
+    }
+  ]
+}

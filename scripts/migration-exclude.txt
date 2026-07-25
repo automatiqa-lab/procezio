@@ -1,0 +1,15 @@
+# Paths excluded from the public repo (see MIGRATION.md).
+# Use with:  rsync -a --exclude-from=scripts/migration-exclude.txt ./ /c/Dev/procezio/
+# Internal build tooling and machine-local files never migrate to the public tree.
+.harness/
+CLAUDE.md
+MIGRATION.md
+scripts/migration-exclude.txt
+.env
+.env.*
+_internal/
+node_modules/
+**/dist/
+.git/
+scratchpad/
+*.pnav

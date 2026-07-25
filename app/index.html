@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!--
+      Solo-mode Content Security Policy (specs/02b C5, specs/02 section 12).
+      Nothing leaves the browser except a call to the user-configured model endpoint,
+      and model output is DATA, never code: default-src 'self' locks every fetch to
+      same-origin; there is deliberately no 'unsafe-eval' anywhere (the security gate
+      fails the build if it ever appears). connect-src is self, the two LOCAL model
+      origins the provider presets offer out of the box (Ollama on 11434, the key-holding
+      nginx proxy on 8080 - both loopback-only, so this still means "nothing leaves the
+      machine by default"), and a clearly named placeholder for a remote bring-your-own
+      endpoint. (Loopback model origins: Ollama 11434, LM Studio 1234, the key-holding
+      proxy 8080 - the ci:security-solo gate pins connect-src to loopback + placeholder.) A direct-to-cloud endpoint (e.g. api.openai.com) is deliberately NOT
+      allowed here: a deployer who wants that edits this policy knowingly, or uses the
+      proxy - see the provider notes in settings.
+    -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self' http://localhost:11434 http://127.0.0.1:11434 http://localhost:1234 http://127.0.0.1:1234 http://localhost:8080 http://127.0.0.1:8080 https://*.model-endpoint.placeholder; img-src 'self' data:; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
+    />
+    <title>Procezio - Process Navigator</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

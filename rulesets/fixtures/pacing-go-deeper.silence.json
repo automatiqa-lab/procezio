@@ -1,0 +1,32 @@
+{
+  "projection": {
+    "schema_version": "1.0",
+    "process": {
+      "name": "Order to Cash",
+      "trigger": "PO received",
+      "end_state": "Cash collected",
+      "owner": "ops",
+      "north_star": "DSO < 30 days"
+    },
+    "lanes": [{ "id": "lane-ops", "actor": "Ops" }],
+    "nodes": [
+      { "id": "n1", "type": "Start", "lane": "lane-ops", "label": "Start", "metadata": { "system": "Email" } },
+      { "id": "n2", "type": "Step", "lane": "lane-ops", "label": "Match invoice", "metadata": { "system": "SAP" } }
+    ],
+    "edges": [{ "id": "e1", "from": "n1", "to": "n2", "kind": "sequence" }],
+    "zones": [{ "id": 3, "phase": "Understand", "name": "Friction" }]
+  },
+  "event": {
+    "event_id": "10000000-0000-4000-8000-000000000032",
+    "session_id": "aaaaaaaa-0000-4000-8000-00000000000a",
+    "seq": 12,
+    "type": "zone.completed",
+    "author": { "kind": "human", "id": "user-1" },
+    "provenance": { "state": "ink", "accepted_by": null, "accepted_at": null },
+    "payload": { "zone_id": 3, "phase": "Understand" },
+    "correlation_id": "bbbbbbbb-0000-4000-8000-00000000000b",
+    "schema_version": "1.0",
+    "ts": "2026-07-06T10:06:00Z"
+  },
+  "expected": ["zone3-friction-missing"]
+}

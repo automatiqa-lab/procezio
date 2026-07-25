@@ -1,0 +1,16 @@
+Procezio - Process Navigator
+Copyright 2026 Automatiqa Lab by Aleks Sidorecs <automate@automati.qa>
+
+This product includes software developed as part of the Procezio (Process
+Navigator) project (https://www.automati.qa/). Former working title: Opportunity Canvas.
+
+---
+
+Bundled fonts
+
+This product bundles the IBM Plex Sans and IBM Plex Mono typefaces
+(app/public/fonts/*.woff2), Copyright 2017 IBM Corp., licensed under the
+SIL Open Font License, Version 1.1. The full license text is in
+app/public/fonts/LICENSE-IBM-Plex.txt. The OFL is a font-embedding license,
+separate from and compatible with this product's Apache-2.0 license; the
+fonts are shipped as static assets and are not runtime dependencies.

@@ -1,0 +1,63 @@
+{
+  "id": "p2p",
+  "name": "Purchase-to-Pay (P2P)",
+  "description": "A requisition-to-payment flow with a three-way match and a discrepancy chase. Understand zones are seeded; Diverge and Converge are left empty so the ideas are yours.",
+  "frame": {
+    "name": "Purchase-to-Pay",
+    "trigger": "A need is raised by the business",
+    "end_state": "The supplier is paid and the invoice is closed",
+    "owner": "Procurement and Accounts Payable",
+    "frequency": "daily",
+    "volume": "~400 invoices per month",
+    "north_star": "Invoice cycle time - days from receipt to payment"
+  },
+  "nodes": [
+    { "id": "p2p-start", "type": "Start", "lane": "Requester", "label": "Need raised" },
+    { "id": "p2p-req", "type": "Step", "lane": "Requester", "label": "Raise requisition" },
+    { "id": "p2p-po", "type": "Step", "lane": "Buyer", "label": "Create purchase order" },
+    { "id": "p2p-send", "type": "Step", "lane": "Buyer", "label": "Send PO to supplier" },
+    { "id": "p2p-gr", "type": "Step", "lane": "Requester", "label": "Receive goods (GR)" },
+    { "id": "p2p-inv", "type": "Step", "lane": "AP clerk", "label": "Receive invoice" },
+    { "id": "p2p-match", "type": "Step", "lane": "AP clerk", "label": "Three-way match" },
+    { "id": "p2p-ok", "type": "Decision", "lane": "AP clerk", "label": "Match OK?" },
+    { "id": "p2p-chase", "type": "Wait", "lane": "AP clerk", "label": "Chase discrepancy" },
+    { "id": "p2p-approve", "type": "Step", "lane": "Approver", "label": "Approve payment" },
+    { "id": "p2p-end", "type": "End", "lane": "AP clerk", "label": "Supplier paid" }
+  ],
+  "edges": [
+    { "id": "p2p-e1", "from": "p2p-start", "to": "p2p-req", "kind": "sequence" },
+    { "id": "p2p-e2", "from": "p2p-req", "to": "p2p-po", "kind": "sequence" },
+    { "id": "p2p-e3", "from": "p2p-po", "to": "p2p-send", "kind": "sequence" },
+    { "id": "p2p-e4", "from": "p2p-send", "to": "p2p-gr", "kind": "sequence" },
+    { "id": "p2p-e5", "from": "p2p-gr", "to": "p2p-inv", "kind": "sequence" },
+    { "id": "p2p-e6", "from": "p2p-inv", "to": "p2p-match", "kind": "sequence" },
+    { "id": "p2p-e7", "from": "p2p-match", "to": "p2p-ok", "kind": "sequence" },
+    { "id": "p2p-e8", "from": "p2p-ok", "to": "p2p-chase", "kind": "sequence", "label": "no" },
+    { "id": "p2p-e9", "from": "p2p-chase", "to": "p2p-match", "kind": "sequence" },
+    { "id": "p2p-e10", "from": "p2p-ok", "to": "p2p-approve", "kind": "sequence", "label": "yes" },
+    { "id": "p2p-e11", "from": "p2p-approve", "to": "p2p-end", "kind": "sequence" }
+  ],
+  "audit_tags": [
+    {
+      "id": "p2p-a1",
+      "node_id": "p2p-match",
+      "data": "semi-structured",
+      "rules": "mixed",
+      "exceptions": "frequent"
+    }
+  ],
+  "friction": [
+    {
+      "id": "p2p-f1",
+      "node_id": "p2p-match",
+      "waste": "Waiting",
+      "note": "Match stalls when the PO, goods receipt and invoice do not reconcile."
+    },
+    {
+      "id": "p2p-f2",
+      "node_id": "p2p-chase",
+      "waste": "Defects",
+      "note": "Discrepancies are chased by email with no shared status."
+    }
+  ]
+}

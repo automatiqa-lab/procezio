@@ -1,0 +1,48 @@
+{
+  "name": "procezio",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Procezio - Process Navigator: a guided improvement-opportunity canvas with a co-working AI agent.",
+  "author": "Automatiqa Lab by Aleks Sidorecs <automate@automati.qa>",
+  "license": "Apache-2.0",
+  "packageManager": "pnpm@10.4.1",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "typecheck": "pnpm -r typecheck",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "ci:lint": "eslint . && prettier --check .",
+    "ci:typecheck": "node scripts/gates/typecheck.mjs",
+    "ci:license": "node scripts/gates/license.mjs",
+    "ci:schema-drift": "node scripts/gates/schema-drift.mjs",
+    "ci:validators-drift": "node scripts/gates/validators-drift.mjs",
+    "ci:ruleset-drift": "node scripts/gates/ruleset-drift.mjs",
+    "ci:prompt-pack-drift": "node scripts/gates/prompt-pack-drift.mjs",
+    "ci:templates-drift": "node scripts/gates/templates-drift.mjs",
+    "ci:registry-drift": "node scripts/gates/registry-drift.mjs",
+    "ci:fixtures": "node scripts/gates/fixtures.mjs",
+    "ci:replay": "node scripts/gates/replay.mjs",
+    "ci:security-solo": "node scripts/gates/security-solo.mjs",
+    "ci:bundlesize": "node scripts/gates/bundlesize.mjs",
+    "e2e": "playwright test",
+    "e2e:install": "playwright install --with-deps chromium",
+    "ci:acceptance": "corepack pnpm --filter @procezio/core run build && corepack pnpm --filter @procezio/app run build:node && node --test core/dist/event-store.test.js core/dist/projection.test.js core/dist/presentation.test.js core/dist/completeness.test.js core/dist/recalc.test.js core/dist/estimator.test.js core/dist/composer.test.js core/dist/credibility.test.js core/dist/board-review.test.js core/dist/continuity.test.js core/dist/evidence.test.js core/dist/risk-deck.test.js core/dist/session-diff.test.js core/dist/review-schedule.test.js core/dist/challenger.test.js core/dist/rule-engine.test.js core/dist/budget.test.js core/dist/timers.test.js core/dist/compensate.test.js core/dist/llm-client.test.js app/dist/store/canvas-store.test.js app/dist/session.test.js app/dist/map/events.test.js app/dist/map/tokenRoute.test.js app/dist/map/layout.test.js app/dist/canvas/geometry.test.js app/dist/frame/frame.test.js app/dist/friction/friction.test.js app/dist/data/data.test.js app/dist/ideation/ideation.test.js app/dist/prioritize/prioritize.test.js app/dist/gate/gate.test.js app/dist/case/case.test.js app/dist/assumptions/assumptions.test.js app/dist/rules/rules.test.js app/dist/history/history.test.js app/dist/history/replay.test.js app/dist/persistence/pnav.test.js app/dist/persistence/storage.test.js app/dist/tasks/tasks.test.js app/dist/tasks/prompts.test.js app/dist/tasks/seed.test.js app/dist/tasks/challenge.test.js app/dist/tasks/extraction.test.js app/dist/tasks/challenger.test.js app/dist/tasks/composer-name.test.js app/dist/personas/personas.test.js app/dist/benchmarks/benchmarks.test.js app/dist/lint/plainLanguage.test.js app/dist/templates/templates.test.js app/dist/export/onePager.test.js app/dist/export/embed.test.js app/dist/cost/meter.test.js app/dist/session/briefing.test.js app/dist/demo/script.test.js app/dist/shoebox/events.test.js app/dist/provenance/provenance.test.js app/dist/tasks/ideation.test.js app/dist/tasks/draft.test.js app/dist/tasks/chat.test.js app/dist/settings/providers.test.js app/dist/persistence/autosave.test.js app/dist/i18n/i18n.test.js app/dist/ceremony/events.test.js app/dist/case/model.test.js app/dist/prioritize/model.test.js app/dist/derive/derive.test.js schema/src/canvas.schema.test.mjs schema/src/validators.test.mjs scripts/ci/gate-selftest.test.mjs scripts/ci/security-solo.test.mjs scripts/ci/bundlesize.test.mjs",
+    "ci:all": "node scripts/gates/typecheck.mjs && corepack pnpm run ci:lint && node scripts/gates/license.mjs && node scripts/gates/schema-drift.mjs && node scripts/gates/validators-drift.mjs && node scripts/gates/ruleset-drift.mjs && node scripts/gates/prompt-pack-drift.mjs && node scripts/gates/templates-drift.mjs && node scripts/gates/registry-drift.mjs && node scripts/gates/fixtures.mjs && node scripts/gates/replay.mjs && node scripts/gates/security-solo.mjs && node scripts/gates/bundlesize.mjs && corepack pnpm run ci:acceptance"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.5",
+    "@playwright/test": "^1.62.0",
+    "eslint": "9",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.3",
+    "globals": "^17.7.0",
+    "prettier": "^3.9.6",
+    "typescript": "5.9.3",
+    "typescript-eslint": "^8.65.0"
+  }
+}

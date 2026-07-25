@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build output
+dist/
+build/
+*.tsbuildinfo
+
+# Generated types (codegen from schema; regenerated in CI)
+schema/generated/
+
+# Env and secrets
+.env
+.env.*
+!.env.example
+
+# Local / internal (never published)
+_internal/
+*.local
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# Session artifacts (a user's saved sessions stay local) - but the committed demo scenario,
+# generated from the shipped template, is tracked for hands-on testing.
+*.pnav
+!demo/*.pnav
+
+# E2E (Playwright) artifacts
+test-results/
+playwright-report/
+blob-report/
+.playwright/
+/lint-report.json
+
+# v0.4 spec delivery zip (input artifact, not repo content)
+specs_updated/

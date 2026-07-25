@@ -1,0 +1,1263 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://procez.io/schema/canvas.schema.json",
+  "title": "Canvas",
+  "description": "The single contract for Process Navigator (card C7). Three layers in one artifact: (a) the internal canvas ontology, (b) every event payload family plus the event envelope, (c) LLM structured-output contracts that reuse the ontology shapes. Deterministic control plane, generative language surface: this file is the deterministic part. Ratified artifact - change only via amendment PR + decision record (AGENTS.md / specs/04).",
+  "type": "object",
+  "$comment": "Root type = a Canvas document: the projected state of one session across all 8 zones. Event payloads and LLM contracts live in $defs and are referenced by the event store and the LLM client.",
+  "required": ["schema_version", "process", "lanes", "nodes", "edges", "zones"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "$ref": "#/$defs/SchemaVersion" },
+    "process": { "$ref": "#/$defs/Process" },
+    "lanes": { "type": "array", "items": { "$ref": "#/$defs/Lane" } },
+    "nodes": { "type": "array", "items": { "$ref": "#/$defs/Node" } },
+    "edges": { "type": "array", "items": { "$ref": "#/$defs/Edge" } },
+    "zones": { "type": "array", "items": { "$ref": "#/$defs/Zone" } },
+    "friction": { "type": "array", "items": { "$ref": "#/$defs/Friction" } },
+    "audit_tags": { "type": "array", "items": { "$ref": "#/$defs/AuditTag" } },
+    "opportunities": { "type": "array", "items": { "$ref": "#/$defs/Opportunity" } },
+    "assumptions": {
+      "description": "The assumption ledger (v0.3 A2): a first-class object spanning the session. Populated by assumption.added events; prints as the business-case annex.",
+      "type": "array",
+      "items": { "$ref": "#/$defs/Assumption" }
+    },
+    "gates": {
+      "description": "Zone-7 risk-gate results (amendment M2-AMD2). One entry per (opportunity, check), upserted by that composite key from gate.checked events. An opportunity's business case is blocked while any of its five checks is still open. Additive: an item is exactly a GatePayload, so no gate.checked event shape changes.",
+      "type": "array",
+      "items": { "$ref": "#/$defs/Gate" }
+    },
+    "cases": {
+      "description": "Zone-8 business-case drafts (amendment M2-AMD2). One entry per opportunity, upserted by opportunity_id from case.drafted events. Every figure carries a source_ref to its originating zone; every assumption is flagged. Additive: an item is exactly a CasePayload.",
+      "type": "array",
+      "items": { "$ref": "#/$defs/Case" }
+    },
+    "shoebox": {
+      "description": "The Shoebox (spec v0.4 section 7): notes and dropped files beside the method. Upserted by item_id from shoebox.item.added; shoebox.item.consented sets consented=true (per-file egress opt-in). Additive and optional.",
+      "type": "array",
+      "items": { "$ref": "#/$defs/ShoeboxItem" }
+    },
+    "stakeholder_personas": {
+      "description": "User-defined stakeholder personas (spec v0.4 section 6, decision hevkGx6MJJAh; Wave 2 B4). A constrained, annotation-only persona the user summons to rehearse a viewpoint. Upserted by id from persona.defined. Their contributions are ALWAYS tagged 'simulated perspective' - rehearsal, not verification. Additive and optional.",
+      "type": "array",
+      "items": { "$ref": "#/$defs/StakeholderPersona" }
+    },
+    "simulated_perspectives": {
+      "description": "The simulated-perspective annotations personas have contributed (spec v0.4 section 6, Wave 2 B4). Appended from persona.annotated. Rehearsal, never verification: the export gate surfaces any unconfirmed entry as 'confirm with the real stakeholder'. Additive and optional.",
+      "type": "array",
+      "items": { "$ref": "#/$defs/SimulatedPerspective" }
+    }
+  },
+  "$defs": {
+    "SchemaVersion": {
+      "title": "SchemaVersion",
+      "description": "Event/contract schema version, decoupled from app version. Additive-first evolution (specs/02 section 3).",
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+$"
+    },
+    "Uuid": {
+      "title": "Uuid",
+      "type": "string",
+      "format": "uuid"
+    },
+    "Timestamp": {
+      "title": "Timestamp",
+      "type": "string",
+      "format": "date-time"
+    },
+    "Id": {
+      "title": "Id",
+      "description": "Stable within-canvas identifier for an ontology element (node/edge/lane/etc). Human-authorable slug, not a uuid - the canvas works on paper.",
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$"
+    },
+
+    "NodeType": {
+      "title": "NodeType",
+      "description": "The five user-facing shapes (spec v0.2 section 7). Wait and Decision are analytically load-bearing.",
+      "enum": ["Start", "Step", "Decision", "Wait", "End"]
+    },
+    "EdgeKind": {
+      "title": "EdgeKind",
+      "description": "sequence = normal left-to-right flow; exception-backedge = the one backward rework loop (SDD-2 P2P exception path).",
+      "enum": ["sequence", "exception-backedge"]
+    },
+    "Phase": {
+      "title": "Phase",
+      "description": "The three cognitive phases the 8 zones group into.",
+      "enum": ["Understand", "Diverge", "Converge"]
+    },
+    "Downtime": {
+      "title": "Downtime",
+      "description": "The 8 Lean wastes (DOWNTIME) used as tappable friction prompts in zone 3.",
+      "enum": [
+        "Defects",
+        "Overproduction",
+        "Waiting",
+        "Non-utilized-talent",
+        "Transportation",
+        "Inventory",
+        "Motion",
+        "Extra-processing"
+      ]
+    },
+    "DataTag": {
+      "title": "DataTag",
+      "enum": ["structured", "semi-structured", "unstructured"]
+    },
+    "RulesTag": {
+      "title": "RulesTag",
+      "enum": ["explicit", "mixed", "judgment"]
+    },
+    "ExceptionsTag": {
+      "title": "ExceptionsTag",
+      "enum": ["rare", "occasional", "frequent"]
+    },
+    "TaxonomyRung": {
+      "title": "TaxonomyRung",
+      "description": "The six opportunity rungs (spec v0.2 section 8). Exactly one per shortlisted opportunity.",
+      "enum": ["Remove", "Standardize", "Connect", "Automate", "Assist", "Delegate"]
+    },
+    "Quadrant": {
+      "title": "Quadrant",
+      "description": "2x2 effort-vs-benefit placement (spec v0.2 section 9).",
+      "enum": ["Quick Win", "Strategic", "Fill-in", "Avoid"]
+    },
+    "Provenance": {
+      "title": "Provenance",
+      "description": "Two-ink rule (constitution p5). Agent-authored content is born pencil until a human accepts it.",
+      "type": "object",
+      "required": ["state"],
+      "additionalProperties": false,
+      "properties": {
+        "state": { "enum": ["ink", "pencil"] },
+        "accepted_by": { "type": ["string", "null"] },
+        "accepted_at": { "oneOf": [{ "$ref": "#/$defs/Timestamp" }, { "type": "null" }] }
+      }
+    },
+
+    "NodeMetadata": {
+      "title": "NodeMetadata",
+      "description": "Per-node metadata captured in zone 2 (spec v0.2 section 6, zone 2). All optional - a Start/End node carries little, a Step carries all of it.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "actor": { "type": "string" },
+        "action": { "type": "string" },
+        "system": { "type": "string" },
+        "input": { "type": "string" },
+        "output": { "type": "string" },
+        "time": { "type": "string" }
+      }
+    },
+    "ConfidenceTag": {
+      "title": "ConfidenceTag",
+      "description": "Source grade of a quantitative field (spec v0.4 section 3 C2, section 8): gut-feel (narrated from memory) -> verified (checked with a person) -> log-checked (pulled from a system log/report) -> document-backed (a file consented into the Shoebox). Auto-populates the assumption ledger. Additive to the coarse low/med/high on Assumption, which stays for the ledger's own confidence.",
+      "enum": ["gut-feel", "verified", "log-checked", "document-backed"]
+    },
+    "TaggedQuantity": {
+      "title": "TaggedQuantity",
+      "description": "A quantitative field with its source grade (spec v0.4 C2). value is free text (a number with units, or a range like '2-5 days') - the methodology works on paper, so no number is invented; confidence carries the source grade into the ledger. Optional everywhere: absence feeds an Auditor probe, never a blocker.",
+      "type": "object",
+      "required": ["value"],
+      "additionalProperties": false,
+      "properties": {
+        "value": { "type": "string" },
+        "confidence": { "$ref": "#/$defs/ConfidenceTag" }
+      }
+    },
+    "StepDetail": {
+      "title": "StepDetail",
+      "description": "Optional zone-2 detail panel for a Step node (spec v0.4 section 3, C1). lane/owner is Node.lane and varies is Node.varies; the rest lives here. Every field optional - absence feeds an Auditor probe, never a blocker.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "systems": { "type": "array", "items": { "type": "string" } },
+        "touch_time": { "$ref": "#/$defs/TaggedQuantity" },
+        "elapsed_time": { "$ref": "#/$defs/TaggedQuantity" },
+        "frequency": { "$ref": "#/$defs/TaggedQuantity" },
+        "rework": {
+          "description": "Does this step loop back / get redone? (hidden-work probe).",
+          "type": "boolean"
+        },
+        "batch": { "enum": ["batch", "one-by-one"] },
+        "standardized": { "enum": ["standardized", "improvised"] },
+        "evidence": {
+          "description": "Free-text pointer or Shoebox item id backing this step's figures (evidence slot).",
+          "type": "string"
+        }
+      }
+    },
+    "DecisionDetail": {
+      "title": "DecisionDetail",
+      "description": "Optional zone-2 detail panel for a Decision node (spec v0.4 section 3, C1). Branch shares live on the Decision-outgoing edges (Edge.branch_share), not here; the basis stays on the Decision.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "question": { "type": "string" },
+        "basis": { "enum": ["written-rule", "judgment", "escalation"] },
+        "decider": { "type": "string" },
+        "rule_ref": {
+          "description": "Link to a Data & rules entry that governs this decision (e.g. 'R2').",
+          "type": "string"
+        },
+        "decision_table": {
+          "description": "An explicit decision table (Wave 3 F5): the when->then rules the decision follows, made concrete instead of left in someone's head. Each row is a condition and the outcome it drives.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["when", "then"],
+            "additionalProperties": false,
+            "properties": {
+              "when": { "type": "string" },
+              "then": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "WaitDetail": {
+      "title": "WaitDetail",
+      "description": "Optional zone-2 detail panel for a Wait node (spec v0.4 section 3, C1). Wait owns all elapsed/queue time in the model; chasing is the hidden touch time inside a wait.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "duration": { "$ref": "#/$defs/TaggedQuantity" },
+        "duration_worst": { "$ref": "#/$defs/TaggedQuantity" },
+        "waiting_on": { "enum": ["external", "internal-approval", "system"] },
+        "chasing": {
+          "description": "Is someone actively chasing during the wait? (surfaces hidden touch time).",
+          "type": "boolean"
+        },
+        "release_trigger": { "type": "string" }
+      }
+    },
+    "StartDetail": {
+      "title": "StartDetail",
+      "description": "Optional detail for a Start node (spec v0.4 section 3): deliberately thin.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "arrival_pattern": { "enum": ["steady", "batchy", "seasonal"] }
+      }
+    },
+    "EndDetail": {
+      "title": "EndDetail",
+      "description": "Optional detail for an End node (spec v0.4 section 3): deliberately thin.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "definition_of_done": { "type": "string" },
+        "consumer": {
+          "description": "The downstream consumer of this process's output.",
+          "type": "string"
+        }
+      }
+    },
+    "Node": {
+      "title": "Node",
+      "description": "A typed node in the process map. Multiple inbound edges + waits_on model the parallel join (SDD-2 handoff to C7) without a sixth user-facing shape. v0.4 adds optional per-type detail panels (step_detail/decision_detail/wait_detail/start_detail/end_detail); the panel matching the node's type is the one the UI shows, but the schema stays permissive (all optional, additive) - the type<->panel pairing is a UI/projection concern, not a validation gate.",
+      "type": "object",
+      "required": ["id", "type", "lane", "label"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/Id" },
+        "type": { "$ref": "#/$defs/NodeType" },
+        "lane": { "$ref": "#/$defs/Id" },
+        "label": { "type": "string", "minLength": 1 },
+        "zone": { "type": "integer", "minimum": 1, "maximum": 8 },
+        "parent": { "$ref": "#/$defs/Id" },
+        "metadata": { "$ref": "#/$defs/NodeMetadata" },
+        "waits_on": {
+          "description": "Node-level wait-for-dependency: this node cannot proceed until every referenced node exists/completes. Models parallel convergence (the 3-way match waits on both goods-receipt and invoice).",
+          "type": "array",
+          "items": { "$ref": "#/$defs/Id" }
+        },
+        "varies": {
+          "description": "Marks a node whose behaviour changes by mode, season, or exception path (v0.3 A4). Variance is captured in the assumption ledger, not modeled - variant modeling stays out of scope v1.",
+          "type": "boolean"
+        },
+        "step_detail": { "$ref": "#/$defs/StepDetail" },
+        "decision_detail": { "$ref": "#/$defs/DecisionDetail" },
+        "wait_detail": { "$ref": "#/$defs/WaitDetail" },
+        "start_detail": { "$ref": "#/$defs/StartDetail" },
+        "end_detail": { "$ref": "#/$defs/EndDetail" }
+      }
+    },
+    "Edge": {
+      "title": "Edge",
+      "description": "A directed edge, and in v0.4 a first-class handoff object (spec v0.4 section 3, decision t7Fd0ny1kLEB): the clickable thing between two steps carries how the work moves. A node with multiple inbound edges is still a join. medium/trigger/branch_share are optional and additive; a re-key medium between two system-backed steps is what the deterministic HD-2 rule reads to flag a Connect candidate. Transport/queue time is deliberately excluded here - Wait owns time.",
+      "type": "object",
+      "required": ["id", "from", "to", "kind"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/Id" },
+        "from": { "$ref": "#/$defs/Id" },
+        "to": { "$ref": "#/$defs/Id" },
+        "kind": { "$ref": "#/$defs/EdgeKind" },
+        "label": { "type": "string" },
+        "medium": {
+          "description": "How the work crosses this handoff (spec v0.4 section 3). re-key between two system-backed steps is the HD-2 Connect-candidate signal.",
+          "enum": ["system", "mail", "re-key", "paper", "walk-over"]
+        },
+        "trigger": {
+          "description": "What moves the work across: pushed by the sender, pulled by the receiver, or moved in a batch.",
+          "enum": ["push", "pull", "batch"]
+        },
+        "branch_share": {
+          "description": "Percentage of flow taking this edge - only meaningful on a Decision node's outgoing edges (the basis stays on the Decision). An estimator input; tag its confidence in the ledger.",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        }
+      }
+    },
+    "Lane": {
+      "title": "Lane",
+      "description": "A swimlane = one actor.",
+      "type": "object",
+      "required": ["id", "actor"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/Id" },
+        "actor": { "type": "string", "minLength": 1 }
+      }
+    },
+    "Zone": {
+      "title": "Zone",
+      "description": "One of the fixed 8 zones. The structure is the pedagogy and cannot be rearranged.",
+      "type": "object",
+      "required": ["id", "phase", "name"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "integer", "minimum": 1, "maximum": 8 },
+        "phase": { "$ref": "#/$defs/Phase" },
+        "name": { "type": "string", "minLength": 1 }
+      }
+    },
+    "Process": {
+      "title": "Process",
+      "description": "Zone 1 (Frame). The north-star metric is the anchor every later score answers to.",
+      "type": "object",
+      "required": ["name", "trigger", "end_state", "owner", "north_star"],
+      "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "pain": {
+          "description": "Pain-first entry (spec v0.4 C3): the pain in the user's own words - what hurts about this process today. The session starts from pain, not from a blank form; the rest of the Frame is derived from it. Optional and additive.",
+          "type": "string"
+        },
+        "trigger": { "type": "string" },
+        "end_state": { "type": "string" },
+        "owner": { "type": "string" },
+        "frequency": { "type": "string" },
+        "volume": { "type": "string" },
+        "touch_time": { "type": "string" },
+        "north_star": { "type": "string" }
+      }
+    },
+    "Friction": {
+      "title": "Friction",
+      "description": "Zone 3. Every friction pins to a node (a step or a gap).",
+      "type": "object",
+      "required": ["id", "waste", "node_id"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/Id" },
+        "waste": { "$ref": "#/$defs/Downtime" },
+        "node_id": { "$ref": "#/$defs/Id" },
+        "note": { "type": "string" }
+      }
+    },
+    "AuditTag": {
+      "title": "AuditTag",
+      "description": "Zone 4 evidence layer: the data/rules/exceptions profile of a step. This is what later challenges cite.",
+      "type": "object",
+      "required": ["id", "node_id", "data", "rules", "exceptions"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/Id" },
+        "node_id": { "$ref": "#/$defs/Id" },
+        "data": { "$ref": "#/$defs/DataTag" },
+        "rules": { "$ref": "#/$defs/RulesTag" },
+        "exceptions": { "$ref": "#/$defs/ExceptionsTag" }
+      }
+    },
+    "Score": {
+      "title": "Score",
+      "description": "1-5 rank-only score per axis (spec v0.2 section 9). Never money.",
+      "type": "object",
+      "required": ["benefit", "effort"],
+      "additionalProperties": false,
+      "properties": {
+        "benefit": { "type": "number", "minimum": 1, "maximum": 5 },
+        "effort": { "type": "number", "minimum": 1, "maximum": 5 }
+      }
+    },
+    "Opportunity": {
+      "title": "Opportunity",
+      "description": "Zones 5/6. Generated in 5 without judgment; triaged and, for the Now pile, scored and given a rung in 6. Rung is relaxed to optional (v0.3 A5): a candidate is triaged before it earns a rung.",
+      "type": "object",
+      "required": ["id", "title"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/Id" },
+        "title": { "type": "string", "minLength": 1 },
+        "rung": { "$ref": "#/$defs/TaxonomyRung" },
+        "triage": {
+          "description": "Zone-6 triage pile before scoring (v0.3 A5): fast, gut-level, no numbers. Full scoring applies to the Now pile only.",
+          "enum": ["Now", "Maybe", "No"]
+        },
+        "triage_reason": {
+          "description": "The decision journal (Wave 2 G3): one line on WHY this idea was triaged the way it was. Optional; surfaced in the case annex and one-pager so a Maybe/No is defensible later.",
+          "type": "string"
+        },
+        "committed": { "type": "boolean" },
+        "score": { "$ref": "#/$defs/Score" },
+        "quadrant": { "$ref": "#/$defs/Quadrant" },
+        "depends_on": { "type": "array", "items": { "$ref": "#/$defs/Id" } },
+        "target_refs": {
+          "description": "The map elements this idea acts on (spec v0.4 section 9): node or edge ids the target-state composer transforms under this opportunity's rung. Optional and additive - an idea can exist before it is pinned to specific elements.",
+          "type": "array",
+          "items": { "$ref": "#/$defs/Id" }
+        }
+      }
+    },
+
+    "Author": {
+      "title": "Author",
+      "type": "object",
+      "required": ["kind", "id"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": { "enum": ["human", "agent"] },
+        "id": { "type": "string" },
+        "model_ref": { "type": "string" }
+      }
+    },
+    "EventType": {
+      "title": "EventType",
+      "description": "The concrete event types across the payload families (specs/02 section 4; extended by v0.3 amendment with frame.set and assumption.added).",
+      "enum": [
+        "session.started",
+        "zone.completed",
+        "node.created",
+        "edge.created",
+        "friction.pinned",
+        "audit_tag.set",
+        "opportunity.created",
+        "score.committed",
+        "challenge.raised",
+        "gate.checked",
+        "case.drafted",
+        "flag.accepted",
+        "rule.fired",
+        "budget.spent",
+        "agent.message",
+        "frame.set",
+        "assumption.added",
+        "commitment",
+        "step.reassigned",
+        "tobe.snapshot.accepted",
+        "shoebox.item.added",
+        "shoebox.item.consented",
+        "extraction.result",
+        "challenge.issued",
+        "challenge.answered",
+        "checkpoint.exported",
+        "persona.defined",
+        "persona.annotated"
+      ]
+    },
+    "EventEnvelope": {
+      "title": "EventEnvelope",
+      "description": "The immutable, attributed log record (specs/02 section 4). Truth is an event log; audit is the storage model, not a feature.",
+      "type": "object",
+      "required": [
+        "event_id",
+        "session_id",
+        "seq",
+        "type",
+        "author",
+        "provenance",
+        "payload",
+        "correlation_id",
+        "schema_version",
+        "ts"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "event_id": { "$ref": "#/$defs/Uuid" },
+        "session_id": { "$ref": "#/$defs/Uuid" },
+        "seq": { "type": "integer", "minimum": 0 },
+        "type": { "$ref": "#/$defs/EventType" },
+        "author": { "$ref": "#/$defs/Author" },
+        "provenance": { "$ref": "#/$defs/Provenance" },
+        "payload": { "$ref": "#/$defs/EventPayload" },
+        "causation_id": { "type": ["string", "null"] },
+        "correlation_id": { "$ref": "#/$defs/Uuid" },
+        "compensates": { "oneOf": [{ "$ref": "#/$defs/Uuid" }, { "type": "null" }] },
+        "schema_version": { "$ref": "#/$defs/SchemaVersion" },
+        "ts": { "$ref": "#/$defs/Timestamp" }
+      }
+    },
+    "EventPayload": {
+      "title": "EventPayload",
+      "description": "Discriminated union of the 15 payload families. additionalProperties:false on each member keeps the union disjoint so exactly one matches.",
+      "oneOf": [
+        { "$ref": "#/$defs/SessionPayload" },
+        { "$ref": "#/$defs/ZonePayload" },
+        { "$ref": "#/$defs/NodePayload" },
+        { "$ref": "#/$defs/EdgePayload" },
+        { "$ref": "#/$defs/FrictionPayload" },
+        { "$ref": "#/$defs/AuditTagPayload" },
+        { "$ref": "#/$defs/OpportunityPayload" },
+        { "$ref": "#/$defs/ScoreCommittedPayload" },
+        { "$ref": "#/$defs/ChallengePayload" },
+        { "$ref": "#/$defs/GatePayload" },
+        { "$ref": "#/$defs/CasePayload" },
+        { "$ref": "#/$defs/FlagPayload" },
+        { "$ref": "#/$defs/RuleFiredPayload" },
+        { "$ref": "#/$defs/BudgetPayload" },
+        { "$ref": "#/$defs/AgentMessagePayload" },
+        { "$ref": "#/$defs/FramePayload" },
+        { "$ref": "#/$defs/AssumptionAddedPayload" },
+        { "$ref": "#/$defs/CommitmentPayload" },
+        { "$ref": "#/$defs/StepReassignedPayload" },
+        { "$ref": "#/$defs/ToBeSnapshotAcceptedPayload" },
+        { "$ref": "#/$defs/ShoeboxItemAddedPayload" },
+        { "$ref": "#/$defs/ShoeboxItemConsentedPayload" },
+        { "$ref": "#/$defs/ExtractionResultPayload" },
+        { "$ref": "#/$defs/ChallengeIssuedPayload" },
+        { "$ref": "#/$defs/PersonaDefinedPayload" },
+        { "$ref": "#/$defs/PersonaAnnotatedPayload" },
+        { "$ref": "#/$defs/ChallengeAnsweredPayload" },
+        { "$ref": "#/$defs/CheckpointExportedPayload" }
+      ]
+    },
+    "SessionPayload": {
+      "title": "SessionPayload",
+      "description": "session.* family. Pins the determinism inputs (ruleset hash, prompt-pack version, model ref).",
+      "type": "object",
+      "required": ["process_name", "ruleset_hash", "prompt_pack_version"],
+      "additionalProperties": false,
+      "properties": {
+        "process_name": { "type": "string" },
+        "ruleset_hash": { "type": "string" },
+        "prompt_pack_version": { "type": "string" },
+        "model_ref": { "type": "string" }
+      }
+    },
+    "ZonePayload": {
+      "title": "ZonePayload",
+      "description": "zone.* family.",
+      "type": "object",
+      "required": ["zone_id"],
+      "additionalProperties": false,
+      "properties": {
+        "zone_id": { "type": "integer", "minimum": 1, "maximum": 8 },
+        "phase": { "$ref": "#/$defs/Phase" }
+      }
+    },
+    "NodePayload": {
+      "title": "NodePayload",
+      "description": "node.* family - the created/updated node. The optional 'actor' carries the human-readable swimlane label for the node's lane, independent of the lane id slug: the creating event sets the actor once, and projection folds it onto the derived Lane instead of defaulting the actor to the id. Additive lane-actor mechanism (no new event type needed - node.created already fabricates the lane).",
+      "type": "object",
+      "required": ["node"],
+      "additionalProperties": false,
+      "properties": {
+        "node": { "$ref": "#/$defs/Node" },
+        "actor": {
+          "description": "Human-readable actor label for node.lane, set independently of the id slug. Optional; projection falls back to the lane id when absent.",
+          "type": "string"
+        }
+      }
+    },
+    "EdgePayload": {
+      "title": "EdgePayload",
+      "description": "edge.* family.",
+      "type": "object",
+      "required": ["edge"],
+      "additionalProperties": false,
+      "properties": {
+        "edge": { "$ref": "#/$defs/Edge" }
+      }
+    },
+    "FrictionPayload": {
+      "title": "FrictionPayload",
+      "description": "friction.* family.",
+      "type": "object",
+      "required": ["friction"],
+      "additionalProperties": false,
+      "properties": {
+        "friction": { "$ref": "#/$defs/Friction" }
+      }
+    },
+    "AuditTagPayload": {
+      "title": "AuditTagPayload",
+      "description": "audit_tag.* family.",
+      "type": "object",
+      "required": ["audit_tag"],
+      "additionalProperties": false,
+      "properties": {
+        "audit_tag": { "$ref": "#/$defs/AuditTag" }
+      }
+    },
+    "OpportunityPayload": {
+      "title": "OpportunityPayload",
+      "description": "opportunity.* family (create/update in zones 5/6, pre-commit).",
+      "type": "object",
+      "required": ["opportunity"],
+      "additionalProperties": false,
+      "properties": {
+        "opportunity": { "$ref": "#/$defs/Opportunity" }
+      }
+    },
+    "ScoreCommittedPayload": {
+      "title": "ScoreCommittedPayload",
+      "description": "score.committed - the anti-anchoring trigger. Zone-6 agent rules fire only on this event, never pre-commit.",
+      "type": "object",
+      "required": ["opportunity_id", "score"],
+      "additionalProperties": false,
+      "properties": {
+        "opportunity_id": { "$ref": "#/$defs/Id" },
+        "score": { "$ref": "#/$defs/Score" }
+      }
+    },
+    "ChallengePayload": {
+      "title": "ChallengePayload",
+      "description": "challenge.* family. At most one per commit, citing specific canvas evidence.",
+      "type": "object",
+      "required": ["opportunity_id", "dimension", "message", "evidence_refs"],
+      "additionalProperties": false,
+      "properties": {
+        "opportunity_id": { "$ref": "#/$defs/Id" },
+        "dimension": { "enum": ["benefit", "effort"] },
+        "message": { "type": "string" },
+        "evidence_refs": { "type": "array", "items": { "$ref": "#/$defs/Id" } }
+      }
+    },
+    "GatePayload": {
+      "title": "GatePayload",
+      "description": "gate.* family - one of the five zone-7 risk checks.",
+      "type": "object",
+      "required": ["opportunity_id", "check", "status"],
+      "additionalProperties": false,
+      "properties": {
+        "opportunity_id": { "$ref": "#/$defs/Id" },
+        "check": {
+          "enum": [
+            "data-privacy",
+            "regulatory-compliance",
+            "failure-blast-radius",
+            "accountability",
+            "change-impact-on-people"
+          ]
+        },
+        "status": { "enum": ["open", "cleared"] },
+        "finding": { "type": "string" }
+      }
+    },
+    "CasePayload": {
+      "title": "CasePayload",
+      "description": "case.* family - the zone-8 business case draft. Every figure carries a source ref to its originating zone; every assumption is flagged.",
+      "type": "object",
+      "required": ["opportunity_id", "figures", "assumptions"],
+      "additionalProperties": false,
+      "properties": {
+        "opportunity_id": { "$ref": "#/$defs/Id" },
+        "figures": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["label", "value", "source_ref"],
+            "additionalProperties": false,
+            "properties": {
+              "label": { "type": "string" },
+              "value": { "type": "string" },
+              "source_ref": { "$ref": "#/$defs/Id" },
+              "kind": {
+                "description": "Which side of the case this figure sits on (v0.3 A1): the business case must carry both cost and benefit.",
+                "enum": ["cost", "benefit"]
+              },
+              "benefit_class": {
+                "description": "Mandatory benefit classification (v0.3 A1). capacity-release is explicitly NOT savings until redeployment is named; the template renders the three classes separately.",
+                "enum": ["hard-savings", "capacity-release", "quality-speed"]
+              },
+              "redeployment_owner": {
+                "description": "For a capacity-release benefit: who owns redeploying the freed hours. Freed hours are never summed into savings until this is named (v0.3 A1).",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "assumptions": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Assumption" }
+        }
+      }
+    },
+    "Gate": { "$ref": "#/$defs/GatePayload" },
+    "Case": { "$ref": "#/$defs/CasePayload" },
+    "Assumption": {
+      "title": "Assumption",
+      "description": "A flagged, sourced assumption in the assumption ledger. No number is ever invented (traceability rule).",
+      "type": "object",
+      "required": ["statement", "source", "confidence"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/Id",
+          "description": "Optional stable id (v0.4 amendment 2026-07-24): lets a ledger entry be UPDATED in place - e.g. adding a verify plan after flagging - via a same-id assumption.added upsert. Entries without an id (pre-amendment logs) stay append-only and replay unchanged."
+        },
+        "statement": { "type": "string" },
+        "source": { "type": "string" },
+        "confidence": { "enum": ["low", "med", "high"] },
+        "admiralty": {
+          "description": "Optional two-axis Admiralty grade (Wave 2 D2): source reliability A-F and corroboration 1-6, kept independent (a reliable source can still be uncorroborated). Upgrades the coarse gut-feel/verified confidence without replacing it.",
+          "type": "object",
+          "required": ["reliability", "corroboration"],
+          "additionalProperties": false,
+          "properties": {
+            "reliability": { "enum": ["A", "B", "C", "D", "E", "F"] },
+            "corroboration": { "enum": ["1", "2", "3", "4", "5", "6"] }
+          }
+        },
+        "owner": {
+          "description": "Who owns verifying this assumption (v0.3 A2). Optional; the verification checklist surfaces owner alongside the verify_by suggestion.",
+          "type": "string"
+        },
+        "verify_by": { "type": "string" },
+        "evidence": {
+          "description": "A reference to concrete proof backing this assumption (Wave 3 D7): a document name, a screenshot filename, an export, a ticket. Text only and kept local - the artifact never leaves the browser. An assumption WITH evidence is evidence-backed; without, it is asserted-only.",
+          "type": "string"
+        }
+      }
+    },
+    "FlagPayload": {
+      "title": "FlagPayload",
+      "description": "flag.* family - accept/reject of a pencil (agent) contribution; transitions provenance.",
+      "type": "object",
+      "required": ["target_event_id", "decision"],
+      "additionalProperties": false,
+      "properties": {
+        "target_event_id": { "$ref": "#/$defs/Uuid" },
+        "decision": { "enum": ["accepted", "rejected"] }
+      }
+    },
+    "RuleFiredPayload": {
+      "title": "RuleFiredPayload",
+      "description": "rule.fired - every rule firing is audited. This is how agent behavior stays replayable.",
+      "type": "object",
+      "required": ["rule_id", "severity"],
+      "additionalProperties": false,
+      "properties": {
+        "rule_id": { "type": "string" },
+        "severity": { "enum": ["info", "nudge", "challenge", "block"] },
+        "budget_class": { "type": "string" },
+        "matched_on": { "type": "string" }
+      }
+    },
+    "BudgetPayload": {
+      "title": "BudgetPayload",
+      "description": "budget.* family - the interjection ledger. Visible pips are a projection of these events.",
+      "type": "object",
+      "required": ["zone_id", "spent", "window"],
+      "additionalProperties": false,
+      "properties": {
+        "zone_id": { "type": "integer", "minimum": 1, "maximum": 8 },
+        "spent": { "type": "integer", "minimum": 0 },
+        "window": { "type": "string" }
+      }
+    },
+    "AgentMessagePayload": {
+      "title": "AgentMessagePayload",
+      "description": "agent.message - a chat-sidebar or in-canvas annotation from the agent. Born pencil.",
+      "type": "object",
+      "required": ["text"],
+      "additionalProperties": false,
+      "properties": {
+        "text": { "type": "string" },
+        "anchor_ref": { "$ref": "#/$defs/Id" }
+      }
+    },
+    "FramePayload": {
+      "title": "FramePayload",
+      "description": "frame.set family (v0.3). A partial patch of the zone-1 Frame: every field is optional, mirroring Process, so a frame.set carries only the fields being set and projection merges them onto canvas.process, leaving unmentioned fields untouched. Absent fields are never blanked. minProperties 1 keeps every field optional while forbidding the degenerate empty patch, so an empty payload {} still matches no family in the EventPayload oneOf.",
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "properties": {
+        "name": { "type": "string" },
+        "pain": { "type": "string" },
+        "trigger": { "type": "string" },
+        "end_state": { "type": "string" },
+        "owner": { "type": "string" },
+        "frequency": { "type": "string" },
+        "volume": { "type": "string" },
+        "touch_time": { "type": "string" },
+        "north_star": { "type": "string" }
+      }
+    },
+    "AssumptionAddedPayload": {
+      "title": "AssumptionAddedPayload",
+      "description": "assumption.added family (v0.3 A2). Appends one entry to the session-spanning assumption ledger (canvas.assumptions). Entries are created when a quantity is flagged gut-feel, a node is marked varies, the agent guesses a pencil value, or a cost estimate is entered.",
+      "type": "object",
+      "required": ["assumption"],
+      "additionalProperties": false,
+      "properties": {
+        "assumption": { "$ref": "#/$defs/Assumption" }
+      }
+    },
+
+    "EstimatorDelta": {
+      "title": "EstimatorDelta",
+      "description": "Deterministic what-if delta between two process states (spec v0.4 section 10 F1). Free-text values so no number is invented; every value is 'an estimate from your inputs, not a measurement' and its confidence lives in the ledger.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "cycle_time": { "type": "string" },
+        "touch_time": { "type": "string" },
+        "handoff_count": { "type": "integer" },
+        "biggest_wait": { "type": "string" }
+      }
+    },
+    "ExtractionChip": {
+      "title": "ExtractionChip",
+      "description": "One candidate surfaced by the Auditor from a consented Shoebox item (spec v0.4 section 7). Lands as pencil, linked to its source; the human accepts or rejects. Never feeds ideation or scoring.",
+      "type": "object",
+      "required": ["text"],
+      "additionalProperties": false,
+      "properties": {
+        "text": { "type": "string" },
+        "suggests": {
+          "description": "What the chip proposes, e.g. 'add a month-end reconciliation step'.",
+          "type": "string"
+        }
+      }
+    },
+    "CommitmentPayload": {
+      "title": "CommitmentPayload",
+      "description": "commitment - the signing ceremony (spec v0.4 section 5, decision D1). A deliberate sign+confirm that seals the committed scores and is the ONLY trigger that wakes the Challenger. Anti-anchoring made tangible: the Challenger literally cannot speak before a commitment event exists. score.committed still carries each score; commitment is the irreversible seal over one or more of them.",
+      "type": "object",
+      "required": ["opportunity_ids"],
+      "additionalProperties": false,
+      "properties": {
+        "opportunity_ids": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/Id" }
+        },
+        "signed_by": { "type": "string" },
+        "statement": { "type": "string" }
+      }
+    },
+    "StepReassignedPayload": {
+      "title": "StepReassignedPayload",
+      "description": "step.reassigned - the single content event a geometry drag may emit (spec v0.4 section 3, decision KRH5w5KrRemQ). A vertical drag across a lane boundary is a semantic act (the step now belongs to a different owner), confirmed by the user; every other drag is a presentation event. This is the sole presentation->content crossover.",
+      "type": "object",
+      "required": ["node_id", "to_lane"],
+      "additionalProperties": false,
+      "properties": {
+        "node_id": { "$ref": "#/$defs/Id" },
+        "from_lane": { "$ref": "#/$defs/Id" },
+        "to_lane": { "$ref": "#/$defs/Id" }
+      }
+    },
+    "ToBeSnapshotAcceptedPayload": {
+      "title": "ToBeSnapshotAcceptedPayload",
+      "description": "tobe.snapshot.accepted - the human accepts a target-state composer snapshot into the improvement case as the to-be annex (spec v0.4 section 9, decision R1H3kHjIEvLc). The composer is deterministic (rung transforms); the snapshot records which elements changed under which rung and the estimator delta, always framed 'hypothesis, not a promise'. name/narrative are the optional human-facing labelling the model may add (ComposerNamingOutput) - never the numbers or the structure.",
+      "type": "object",
+      "required": ["opportunity_id", "changes"],
+      "additionalProperties": false,
+      "properties": {
+        "opportunity_id": { "$ref": "#/$defs/Id" },
+        "changes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["element_ref", "rung"],
+            "additionalProperties": false,
+            "properties": {
+              "element_ref": { "$ref": "#/$defs/Id" },
+              "rung": { "$ref": "#/$defs/TaxonomyRung" },
+              "note": { "type": "string" }
+            }
+          }
+        },
+        "delta": { "$ref": "#/$defs/EstimatorDelta" },
+        "name": { "type": "string" },
+        "narrative": { "type": "string" }
+      }
+    },
+    "ShoeboxItem": {
+      "title": "ShoeboxItem",
+      "description": "A projected Shoebox entry (spec v0.4 section 7): a note or a dropped file, and whether its content has been consented to reach the model. Files stay local until consented.",
+      "type": "object",
+      "required": ["item_id", "kind"],
+      "additionalProperties": false,
+      "properties": {
+        "item_id": { "$ref": "#/$defs/Id" },
+        "kind": { "enum": ["note", "file"] },
+        "name": { "type": "string" },
+        "content_type": { "type": "string" },
+        "consented": {
+          "description": "True once the human opted this item's content into the agent context (shoebox.item.consented). Egress-honest: nothing is sent before this.",
+          "type": "boolean"
+        }
+      }
+    },
+    "ShoeboxItemAddedPayload": {
+      "title": "ShoeboxItemAddedPayload",
+      "description": "shoebox.item.added - a note or dropped file enters the Shoebox (spec v0.4 section 7). Files stay local; content reaches the LLM only after a separate shoebox.item.consented (per-file opt-in).",
+      "type": "object",
+      "required": ["item_id", "kind"],
+      "additionalProperties": false,
+      "properties": {
+        "item_id": { "$ref": "#/$defs/Id" },
+        "kind": { "enum": ["note", "file"] },
+        "name": { "type": "string" },
+        "content_type": { "type": "string" }
+      }
+    },
+    "ShoeboxItemConsentedPayload": {
+      "title": "ShoeboxItemConsentedPayload",
+      "description": "shoebox.item.consented - the per-file opt-in that lets a Shoebox item's content reach the configured model (spec v0.4 section 7). Egress-honest: nothing is sent until this exists.",
+      "type": "object",
+      "required": ["item_id"],
+      "additionalProperties": false,
+      "properties": {
+        "item_id": { "$ref": "#/$defs/Id" }
+      }
+    },
+    "ExtractionResultPayload": {
+      "title": "ExtractionResultPayload",
+      "description": "extraction.result - the Auditor's schema-validated extraction from a consented Shoebox item (spec v0.4 section 7). Produces pencil chips linked to their source item ('your note mentions a month-end reconciliation - not on the map -> add?'). Never feeds ideation or scoring.",
+      "type": "object",
+      "required": ["source_item_id", "chips"],
+      "additionalProperties": false,
+      "properties": {
+        "source_item_id": { "$ref": "#/$defs/Id" },
+        "chips": { "type": "array", "items": { "$ref": "#/$defs/ExtractionChip" } }
+      }
+    },
+    "ChallengeIssuedPayload": {
+      "title": "ChallengeIssuedPayload",
+      "description": "challenge.issued - a graded Challenger interjection (spec v0.4 section 5, decision B3). tier is the escalation rung (probe -> alert -> challenge); cited_refs are the canvas element ids the challenge stands on (rendered as the evidence line). Emitted only after a commitment event exists.",
+      "type": "object",
+      "required": ["opportunity_id", "tier", "message", "cited_refs"],
+      "additionalProperties": false,
+      "properties": {
+        "opportunity_id": { "$ref": "#/$defs/Id" },
+        "tier": { "enum": ["probe", "alert", "challenge"] },
+        "dimension": { "enum": ["benefit", "effort"] },
+        "message": { "type": "string" },
+        "cited_refs": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/Id" }
+        }
+      }
+    },
+    "ChallengeAnsweredPayload": {
+      "title": "ChallengeAnsweredPayload",
+      "description": "challenge.answered - the human's response to a challenge (spec v0.4 section 5): keep the score, revise it, or acknowledge. Closes the challenge-verify-respond grammar; the human always decides.",
+      "type": "object",
+      "required": ["opportunity_id", "response"],
+      "additionalProperties": false,
+      "properties": {
+        "opportunity_id": { "$ref": "#/$defs/Id" },
+        "response": { "enum": ["kept", "revised", "acknowledged"] },
+        "note": { "type": "string" }
+      }
+    },
+    "CheckpointExportedPayload": {
+      "title": "CheckpointExportedPayload",
+      "description": "checkpoint.exported - a phase-boundary checkpoint artifact was exported (spec v0.4 section 4/11), e.g. the friction-map snapshot after Understand. Delivers value before completion.",
+      "type": "object",
+      "required": ["checkpoint"],
+      "additionalProperties": false,
+      "properties": {
+        "checkpoint": { "enum": ["understand", "diverge", "converge", "friction-map", "one-pager"] },
+        "format": { "enum": ["png", "pdf", "slide"] }
+      }
+    },
+    "StakeholderPersona": {
+      "title": "StakeholderPersona",
+      "description": "A user-defined stakeholder persona (spec v0.4 section 6, Wave 2 B4). A constrained template - a name, a role, and a one-line perspective the persona argues from - plus the zones it may speak in and the safe triggers that wake it. Hard inherited constraints (enforced by the app, not stored per-persona): annotation-only, muted before the zone-6 commit, evidence-required, max 3 active. The user's perspective text is treated as guarded content the agent voices, never as raw instructions.",
+      "type": "object",
+      "required": ["id", "name", "role", "perspective"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/Id" },
+        "name": { "type": "string", "minLength": 1 },
+        "role": { "type": "string", "minLength": 1 },
+        "perspective": { "type": "string", "minLength": 1 },
+        "zones": {
+          "description": "The zones (1-8) this persona may annotate. Absent = the converge zones (6-8) where a stakeholder view matters most.",
+          "type": "array",
+          "items": { "type": "integer", "minimum": 1, "maximum": 8 }
+        },
+        "triggers": {
+          "description": "The safe-menu triggers that wake the persona. No free-form triggers.",
+          "type": "array",
+          "items": { "enum": ["on-commit", "on-risk-gate", "on-mention"] }
+        }
+      }
+    },
+    "PersonaDefinedPayload": {
+      "title": "PersonaDefinedPayload",
+      "description": "persona.defined - the user creates or edits a stakeholder persona (human ink). Upserted by persona.id into canvas.stakeholder_personas.",
+      "type": "object",
+      "required": ["persona"],
+      "additionalProperties": false,
+      "properties": { "persona": { "$ref": "#/$defs/StakeholderPersona" } }
+    },
+    "SimulatedPerspective": {
+      "title": "SimulatedPerspective",
+      "description": "One simulated-perspective annotation in the ledger (spec v0.4 section 6, Wave 2 B4). id is the annotation's own id so it can be confirmed later. Always rehearsal until confirmed with the real stakeholder.",
+      "type": "object",
+      "required": ["id", "persona_id", "text"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/Id" },
+        "persona_id": { "$ref": "#/$defs/Id" },
+        "text": { "type": "string", "minLength": 1 },
+        "anchor_ref": { "$ref": "#/$defs/Id" },
+        "cited_refs": { "type": "array", "items": { "$ref": "#/$defs/Id" } },
+        "confirmed": {
+          "description": "True once a human confirms this view with the real stakeholder. Until then the export gate flags it.",
+          "type": "boolean"
+        }
+      }
+    },
+    "PersonaAnnotatedPayload": {
+      "title": "PersonaAnnotatedPayload",
+      "description": "persona.annotated - a simulated-perspective annotation from a stakeholder persona (agent-authored, born pencil). ALWAYS a rehearsal, never verification: the export gate nudges 'confirm with the real stakeholder'. cited_refs bind it to canvas evidence, like a challenge. Appended (by id) to canvas.simulated_perspectives; re-emitting the same id with confirmed=true is how a human confirms it with the real stakeholder.",
+      "type": "object",
+      "required": ["id", "persona_id", "text"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/Id" },
+        "persona_id": { "$ref": "#/$defs/Id" },
+        "text": { "type": "string", "minLength": 1 },
+        "anchor_ref": { "$ref": "#/$defs/Id" },
+        "cited_refs": { "type": "array", "items": { "$ref": "#/$defs/Id" } },
+        "confirmed": { "type": "boolean" }
+      }
+    },
+
+    "Position": {
+      "title": "Position",
+      "description": "A world-coordinate point on the infinite canvas (spec v0.4 section 2). Presentation only - never read by the methodology projection.",
+      "type": "object",
+      "required": ["x", "y"],
+      "additionalProperties": false,
+      "properties": {
+        "x": { "type": "number" },
+        "y": { "type": "number" }
+      }
+    },
+    "Size": {
+      "title": "Size",
+      "description": "A frame's width/height in world units (spec v0.4 section 3, frame growth discipline).",
+      "type": "object",
+      "required": ["w", "h"],
+      "additionalProperties": false,
+      "properties": {
+        "w": { "type": "number", "minimum": 0 },
+        "h": { "type": "number", "minimum": 0 }
+      }
+    },
+    "PresentationEventType": {
+      "title": "PresentationEventType",
+      "description": "The presentation-stream event types (spec v0.4 section 3/12, decision KRH5w5KrRemQ). A SEPARATE stream from EventType: geometry lives here, in the same .pnav/.procez file, and is excluded from methodology and provenance projections so it can never change replayed state. The one geometry act with semantic weight - a lane crossing - is NOT here; it is the content event step.reassigned.",
+      "enum": ["node.moved", "frame.moved", "frame.resized", "frame.collapsed"]
+    },
+    "NodeMovedPayload": {
+      "title": "NodeMovedPayload",
+      "description": "node.moved - a node dragged to a new world position (presentation only). Position is presentation; sequence is edges. A vertical drag across a lane boundary additionally emits the content event step.reassigned.",
+      "type": "object",
+      "required": ["node_id", "position"],
+      "additionalProperties": false,
+      "properties": {
+        "node_id": { "$ref": "#/$defs/Id" },
+        "position": { "$ref": "#/$defs/Position" }
+      }
+    },
+    "FrameMovedPayload": {
+      "title": "FrameMovedPayload",
+      "description": "frame.moved - a methodology widget frame dragged on the canvas (presentation only). A user-moved frame is never auto-relocated by the soft-nudge composer.",
+      "type": "object",
+      "required": ["frame_id", "position"],
+      "additionalProperties": false,
+      "properties": {
+        "frame_id": { "$ref": "#/$defs/Id" },
+        "position": { "$ref": "#/$defs/Position" }
+      }
+    },
+    "FrameResizedPayload": {
+      "title": "FrameResizedPayload",
+      "description": "frame.resized - a frame manually resized (presentation only).",
+      "type": "object",
+      "required": ["frame_id", "size"],
+      "additionalProperties": false,
+      "properties": {
+        "frame_id": { "$ref": "#/$defs/Id" },
+        "size": { "$ref": "#/$defs/Size" }
+      }
+    },
+    "FrameCollapsedPayload": {
+      "title": "FrameCollapsedPayload",
+      "description": "frame.collapsed - a frame collapsed or expanded (presentation only).",
+      "type": "object",
+      "required": ["frame_id", "collapsed"],
+      "additionalProperties": false,
+      "properties": {
+        "frame_id": { "$ref": "#/$defs/Id" },
+        "collapsed": { "type": "boolean" }
+      }
+    },
+    "PresentationPayload": {
+      "title": "PresentationPayload",
+      "description": "Discriminated union of the presentation-stream payloads. Kept disjoint by additionalProperties:false + distinct required keys, exactly like EventPayload.",
+      "oneOf": [
+        { "$ref": "#/$defs/NodeMovedPayload" },
+        { "$ref": "#/$defs/FrameMovedPayload" },
+        { "$ref": "#/$defs/FrameResizedPayload" },
+        { "$ref": "#/$defs/FrameCollapsedPayload" }
+      ]
+    },
+    "PresentationEnvelope": {
+      "title": "PresentationEnvelope",
+      "description": "The presentation-stream log record (spec v0.4 section 3/12). Lighter than EventEnvelope: no provenance (geometry has no ink/pencil), no causation/compensation. Its own seq counter within the presentation stream. author is optional (Solo has no need; Collab attributes cursor/geometry moves). Persisted in the same session file but replayed into a SEPARATE PresentationState, never the methodology Canvas.",
+      "type": "object",
+      "required": ["event_id", "session_id", "seq", "type", "payload", "ts"],
+      "additionalProperties": false,
+      "properties": {
+        "event_id": { "$ref": "#/$defs/Uuid" },
+        "session_id": { "$ref": "#/$defs/Uuid" },
+        "seq": { "type": "integer", "minimum": 0 },
+        "type": { "$ref": "#/$defs/PresentationEventType" },
+        "payload": { "$ref": "#/$defs/PresentationPayload" },
+        "author": { "$ref": "#/$defs/Author" },
+        "ts": { "$ref": "#/$defs/Timestamp" }
+      }
+    },
+    "PresentationState": {
+      "title": "PresentationState",
+      "description": "The projected geometry (spec v0.4 section 2/3): last-write-wins node positions and frame geometry, folded from the presentation stream. A disposable view - losing it never loses methodology truth. Frames absent here sit in the default A3 composition.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "nodes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["node_id", "position"],
+            "additionalProperties": false,
+            "properties": {
+              "node_id": { "$ref": "#/$defs/Id" },
+              "position": { "$ref": "#/$defs/Position" }
+            }
+          }
+        },
+        "frames": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["frame_id"],
+            "additionalProperties": false,
+            "properties": {
+              "frame_id": { "$ref": "#/$defs/Id" },
+              "position": { "$ref": "#/$defs/Position" },
+              "size": { "$ref": "#/$defs/Size" },
+              "collapsed": { "type": "boolean" }
+            }
+          }
+        }
+      }
+    },
+
+    "SeedMapOutput": {
+      "title": "SeedMapOutput",
+      "description": "LLM contract: seed a skeleton map from a described process (spec v0.2 zone-2 agent duty). SAME shapes as the ontology - the model fills validated nodes/edges/lanes, it does not invent a format.",
+      "type": "object",
+      "required": ["lanes", "nodes", "edges"],
+      "additionalProperties": false,
+      "properties": {
+        "lanes": { "type": "array", "items": { "$ref": "#/$defs/Lane" } },
+        "nodes": { "type": "array", "items": { "$ref": "#/$defs/Node" } },
+        "edges": { "type": "array", "items": { "$ref": "#/$defs/Edge" } }
+      }
+    },
+    "WordNudgeOutput": {
+      "title": "WordNudgeOutput",
+      "description": "LLM contract: word a nudge/challenge the rules already decided to fire (T1). The rule decides WHETHER; the model only decides HOW to say it.",
+      "type": "object",
+      "required": ["text"],
+      "additionalProperties": false,
+      "properties": {
+        "text": { "type": "string" }
+      }
+    },
+    "ChallengeOutput": {
+      "title": "ChallengeOutput",
+      "description": "LLM contract: the wording of the single post-commit challenge. Same shape as ChallengePayload.",
+      "$ref": "#/$defs/ChallengePayload"
+    },
+    "DraftCaseOutput": {
+      "title": "DraftCaseOutput",
+      "description": "LLM contract: draft the business case from canvas data only. Same shape as CasePayload.",
+      "$ref": "#/$defs/CasePayload"
+    },
+    "ExtractionOutput": {
+      "title": "ExtractionOutput",
+      "description": "LLM contract: surface candidate chips from a consented Shoebox item (spec v0.4 section 7). The model only proposes chips; the caller attaches the source_item_id and the chips land as pencil. The model never writes to the map or the ledger directly.",
+      "type": "object",
+      "required": ["chips"],
+      "additionalProperties": false,
+      "properties": {
+        "chips": { "type": "array", "items": { "$ref": "#/$defs/ExtractionChip" } }
+      }
+    },
+    "ComposerNamingOutput": {
+      "title": "ComposerNamingOutput",
+      "description": "LLM contract: name and narrate a target-state composer snapshot (spec v0.4 section 9). The composer transforms and the estimator delta are deterministic; the model writes only the human-facing name and narrative, never the numbers or the structure.",
+      "type": "object",
+      "required": ["name", "narrative"],
+      "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string" },
+        "narrative": { "type": "string" }
+      }
+    },
+    "ChallengeIssuedOutput": {
+      "title": "ChallengeIssuedOutput",
+      "description": "LLM contract: word a graded challenge the rules already decided to fire (spec v0.4 section 5). The rule sets the tier and the opportunity; the model writes the message and lists the canvas element ids it cites (>=1, the evidence line). The model never decides whether to challenge.",
+      "type": "object",
+      "required": ["message", "cited_refs"],
+      "additionalProperties": false,
+      "properties": {
+        "message": { "type": "string" },
+        "cited_refs": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/Id" }
+        }
+      }
+    },
+    "PersonaAnnotationOutput": {
+      "title": "PersonaAnnotationOutput",
+      "description": "LLM contract: voice a stakeholder persona's simulated-perspective annotation (spec v0.4 section 6, Wave 2 B4). The app decides WHEN the persona speaks and hands over its role + perspective as guarded content; the model writes one short annotation FROM that viewpoint and lists any canvas element ids it leans on. It never invents data, never speaks for the real person, and is always tagged 'simulated perspective' downstream.",
+      "type": "object",
+      "required": ["text"],
+      "additionalProperties": false,
+      "properties": {
+        "text": { "type": "string" },
+        "cited_refs": { "type": "array", "items": { "$ref": "#/$defs/Id" } }
+      }
+    }
+  }
+}

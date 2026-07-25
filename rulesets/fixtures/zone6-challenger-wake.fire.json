@@ -1,0 +1,42 @@
+{
+  "projection": {
+    "schema_version": "1.2",
+    "process": {
+      "name": "Order to Cash",
+      "trigger": "PO received",
+      "end_state": "Cash collected",
+      "owner": "ops",
+      "north_star": "DSO < 30 days"
+    },
+    "lanes": [{ "id": "lane-ops", "actor": "Ops" }],
+    "nodes": [
+      { "id": "n1", "type": "Start", "lane": "lane-ops", "label": "Start" },
+      { "id": "n2", "type": "Step", "lane": "lane-ops", "label": "Match invoice" }
+    ],
+    "edges": [{ "id": "e1", "from": "n1", "to": "n2", "kind": "sequence" }],
+    "zones": [{ "id": 6, "phase": "Converge", "name": "Prioritize" }],
+    "opportunities": [
+      {
+        "id": "o1",
+        "title": "Auto-match invoice",
+        "rung": "Automate",
+        "triage": "Now",
+        "committed": true,
+        "score": { "benefit": 4, "effort": 2 }
+      }
+    ]
+  },
+  "event": {
+    "event_id": "30000000-0000-4000-8000-000000000006",
+    "session_id": "aaaaaaaa-0000-4000-8000-00000000000a",
+    "seq": 20,
+    "type": "commitment",
+    "author": { "kind": "human", "id": "user-1" },
+    "provenance": { "state": "ink", "accepted_by": null, "accepted_at": null },
+    "payload": { "opportunity_ids": ["o1"], "signed_by": "user-1" },
+    "correlation_id": "bbbbbbbb-0000-4000-8000-00000000000b",
+    "schema_version": "1.2",
+    "ts": "2026-07-12T10:00:00Z"
+  },
+  "expected": ["zone6-challenger-wake"]
+}

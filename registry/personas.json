@@ -1,0 +1,31 @@
+{
+  "kind": "personas",
+  "version": "1",
+  "description": "Persona packs the agent can wear. The system trio ships built-in as prompt-pack sections gated by rules; the trio never decides, only words. User-defined stakeholder personas (a constrained annotation-only pack) are a Wave-2 addition.",
+  "entries": [
+    {
+      "id": "facilitator",
+      "name": "The Facilitator",
+      "description": "Paces the session, times zones, offers off-ramps and the re-entry briefing.",
+      "source": "built-in",
+      "pack": "prompt-packs/prompt-pack.json",
+      "license": "Apache-2.0"
+    },
+    {
+      "id": "auditor",
+      "name": "The Process Auditor",
+      "description": "Verifies: gap probes, waste sweep, Shoebox cross-refs; owns the ledger and the export gate.",
+      "source": "built-in",
+      "pack": "prompt-packs/prompt-pack.json",
+      "license": "Apache-2.0"
+    },
+    {
+      "id": "challenger",
+      "name": "The Challenger",
+      "description": "Wakes only after a commitment; raises one evidence-cited challenge, escalating probe -> alert -> challenge.",
+      "source": "built-in",
+      "pack": "prompt-packs/prompt-pack.json",
+      "license": "Apache-2.0"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "name": "@procezio/app",
+  "version": "0.0.0",
+  "private": true,
+  "license": "Apache-2.0",
+  "author": "Automatiqa Lab by Aleks Sidorecs <automate@automati.qa>",
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json",
+    "dev": "vite",
+    "build": "vite build",
+    "build:node": "tsc -p tsconfig.build.json",
+    "preview": "vite preview --port 4173"
+  },
+  "dependencies": {
+    "@procezio/core": "workspace:*",
+    "@procezio/schema": "workspace:*",
+    "@xyflow/react": "^12.11.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "zustand": "5.0.14"
+  },
+  "devDependencies": {
+    "@types/node": "20.19.43",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "vite": "^6.0.7"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "kind": "rulesets",
+  "version": "1",
+  "description": "Versioned rule packs that decide WHETHER the agent may act (the layering principle). The facilitator pack ships built-in; a ruleset is pure YAML, so a community pack is a PR of one file with its fixtures.",
+  "entries": [
+    {
+      "id": "facilitator",
+      "name": "Facilitator rule pack",
+      "description": "Zone gates, pacing, the friction and data probes, and the Challenger wake keyed on the commitment event.",
+      "source": "built-in",
+      "path": "rulesets/ruleset.yaml",
+      "license": "Apache-2.0"
+    }
+  ]
+}

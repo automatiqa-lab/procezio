@@ -1,0 +1,226 @@
+{
+  "schema_version": "1.0",
+  "process": {
+    "name": "Procure-to-Pay, indirect goods",
+    "trigger": "A department needs to buy something not in the catalog",
+    "end_state": "Supplier invoice paid, PO closed",
+    "owner": "Head of Procurement Operations",
+    "frequency": "~400 requisitions / month",
+    "volume": "~4,800 / year",
+    "touch_time": "~45 min of human touch per requisition",
+    "north_star": "Share of invoices paid on time with no manual touch (today: ~55%)"
+  },
+  "lanes": [
+    { "id": "requester", "actor": "Requester" },
+    { "id": "manager", "actor": "Manager" },
+    { "id": "procurement", "actor": "Procurement" },
+    { "id": "supplier", "actor": "Supplier" },
+    { "id": "warehouse", "actor": "Warehouse" },
+    { "id": "ap", "actor": "Accounts Payable" }
+  ],
+  "zones": [
+    { "id": 1, "phase": "Understand", "name": "Frame" },
+    { "id": 2, "phase": "Understand", "name": "Map" },
+    { "id": 3, "phase": "Understand", "name": "Friction" },
+    { "id": 4, "phase": "Understand", "name": "Data & Rules" },
+    { "id": 5, "phase": "Diverge", "name": "Ideation" },
+    { "id": 6, "phase": "Converge", "name": "Prioritize" },
+    { "id": 7, "phase": "Converge", "name": "Risk gate" },
+    { "id": 8, "phase": "Converge", "name": "Business case" }
+  ],
+  "nodes": [
+    { "id": "n-start", "type": "Start", "lane": "requester", "label": "Need identified", "zone": 2 },
+    {
+      "id": "n-raise-req",
+      "type": "Step",
+      "lane": "requester",
+      "label": "Raise requisition",
+      "zone": 2,
+      "metadata": { "actor": "Requester", "action": "Raise requisition", "system": "ERP", "input": "need", "output": "requisition", "time": "10 min" }
+    },
+    { "id": "n-wait-approval", "type": "Wait", "lane": "manager", "label": "Wait: approval", "zone": 2 },
+    {
+      "id": "d-over-threshold",
+      "type": "Decision",
+      "lane": "manager",
+      "label": "Over threshold?",
+      "zone": 2,
+      "metadata": { "actor": "Manager", "action": "Approve", "system": "email", "time": "varies" }
+    },
+    {
+      "id": "n-2nd-approval",
+      "type": "Step",
+      "lane": "manager",
+      "label": "Second approval",
+      "zone": 2,
+      "metadata": { "actor": "Manager", "action": "Second-level approval", "system": "email" }
+    },
+    {
+      "id": "n-create-po",
+      "type": "Step",
+      "lane": "procurement",
+      "label": "Create PO, pick supplier",
+      "zone": 2,
+      "metadata": { "actor": "Procurement", "action": "Create PO", "system": "ERP", "input": "approved requisition", "output": "PO" }
+    },
+    { "id": "n-wait-fulfil", "type": "Wait", "lane": "supplier", "label": "Wait: fulfilment", "zone": 2 },
+    {
+      "id": "n-deliver-goods",
+      "type": "Step",
+      "lane": "supplier",
+      "label": "Deliver goods",
+      "zone": 2,
+      "metadata": { "actor": "Supplier", "action": "Deliver goods", "system": "supplier portal" }
+    },
+    {
+      "id": "n-send-invoice",
+      "type": "Step",
+      "lane": "supplier",
+      "label": "Send invoice",
+      "zone": 2,
+      "metadata": { "actor": "Supplier", "action": "Send invoice", "system": "supplier portal", "output": "invoice" }
+    },
+    {
+      "id": "n-record-gr",
+      "type": "Step",
+      "lane": "warehouse",
+      "label": "Record goods receipt",
+      "zone": 2,
+      "metadata": { "actor": "Warehouse", "action": "Record goods receipt", "system": "warehouse system", "output": "goods receipt" }
+    },
+    {
+      "id": "n-receive-invoice",
+      "type": "Step",
+      "lane": "ap",
+      "label": "Receive invoice",
+      "zone": 2,
+      "metadata": { "actor": "Accounts Payable", "action": "Receive invoice", "system": "AP tool", "input": "invoice" }
+    },
+    {
+      "id": "d-match",
+      "type": "Decision",
+      "lane": "ap",
+      "label": "3-way match ok?",
+      "zone": 2,
+      "waits_on": ["n-record-gr", "n-receive-invoice"],
+      "metadata": { "actor": "Accounts Payable", "action": "Three-way match", "system": "AP tool", "input": "PO, goods receipt, invoice" }
+    },
+    {
+      "id": "n-investigate",
+      "type": "Step",
+      "lane": "procurement",
+      "label": "Investigate mismatch",
+      "zone": 2,
+      "metadata": { "actor": "Procurement", "action": "Investigate mismatch", "system": "ERP" }
+    },
+    {
+      "id": "n-query",
+      "type": "Step",
+      "lane": "ap",
+      "label": "Query",
+      "zone": 2,
+      "metadata": { "actor": "Accounts Payable", "action": "Raise query", "system": "AP tool" }
+    },
+    {
+      "id": "n-post-payment",
+      "type": "Step",
+      "lane": "ap",
+      "label": "Post for payment",
+      "zone": 2,
+      "metadata": { "actor": "Accounts Payable", "action": "Post for payment", "system": "AP tool" }
+    },
+    { "id": "n-wait-payrun", "type": "Wait", "lane": "ap", "label": "Wait: payment run", "zone": 2 },
+    {
+      "id": "n-pay-supplier",
+      "type": "Step",
+      "lane": "ap",
+      "label": "Pay supplier",
+      "zone": 2,
+      "metadata": { "actor": "Accounts Payable", "action": "Pay supplier", "system": "AP tool", "output": "payment" }
+    },
+    { "id": "n-end", "type": "End", "lane": "ap", "label": "PO closed", "zone": 2 }
+  ],
+  "edges": [
+    { "id": "e1", "from": "n-start", "to": "n-raise-req", "kind": "sequence" },
+    { "id": "e2", "from": "n-raise-req", "to": "n-wait-approval", "kind": "sequence" },
+    { "id": "e3", "from": "n-wait-approval", "to": "d-over-threshold", "kind": "sequence" },
+    { "id": "e4", "from": "d-over-threshold", "to": "n-2nd-approval", "kind": "sequence", "label": "yes" },
+    { "id": "e5", "from": "d-over-threshold", "to": "n-create-po", "kind": "sequence", "label": "no" },
+    { "id": "e6", "from": "n-2nd-approval", "to": "n-create-po", "kind": "sequence" },
+    { "id": "e7", "from": "n-create-po", "to": "n-wait-fulfil", "kind": "sequence" },
+    { "id": "e8", "from": "n-wait-fulfil", "to": "n-deliver-goods", "kind": "sequence" },
+    { "id": "e9", "from": "n-deliver-goods", "to": "n-send-invoice", "kind": "sequence" },
+    { "id": "e10", "from": "n-deliver-goods", "to": "n-record-gr", "kind": "sequence" },
+    { "id": "e11", "from": "n-send-invoice", "to": "n-receive-invoice", "kind": "sequence" },
+    { "id": "e12", "from": "n-record-gr", "to": "d-match", "kind": "sequence" },
+    { "id": "e13", "from": "n-receive-invoice", "to": "d-match", "kind": "sequence" },
+    { "id": "e14", "from": "d-match", "to": "n-post-payment", "kind": "sequence", "label": "yes" },
+    { "id": "e15", "from": "d-match", "to": "n-query", "kind": "sequence", "label": "no" },
+    { "id": "e16", "from": "n-query", "to": "n-investigate", "kind": "exception-backedge", "label": "exception loop" },
+    { "id": "e17", "from": "n-investigate", "to": "n-post-payment", "kind": "sequence" },
+    { "id": "e18", "from": "n-post-payment", "to": "n-wait-payrun", "kind": "sequence" },
+    { "id": "e19", "from": "n-wait-payrun", "to": "n-pay-supplier", "kind": "sequence" },
+    { "id": "e20", "from": "n-pay-supplier", "to": "n-end", "kind": "sequence" }
+  ],
+  "friction": [
+    { "id": "f1", "waste": "Waiting", "node_id": "n-wait-approval", "note": "manager inbox is the single biggest delay" },
+    { "id": "f2", "waste": "Defects", "node_id": "d-match", "note": "~30% of invoices mismatch and rework" },
+    { "id": "f3", "waste": "Extra-processing", "node_id": "n-create-po", "note": "manual PO creation, re-keying across systems" },
+    { "id": "f4", "waste": "Transportation", "node_id": "n-receive-invoice", "note": "information carried by hand ERP->email->portal->AP" },
+    { "id": "f5", "waste": "Non-utilized-talent", "node_id": "n-investigate", "note": "senior procurement time on clerical matching" },
+    { "id": "f6", "waste": "Inventory", "node_id": "n-receive-invoice", "note": "backlog of unmatched invoices ages and risks late fees" },
+    { "id": "f7", "waste": "Overproduction", "node_id": "n-raise-req", "note": "duplicate and maverick requisitions" }
+  ],
+  "audit_tags": [
+    { "id": "a1", "node_id": "n-raise-req", "data": "structured", "rules": "mixed", "exceptions": "occasional" },
+    { "id": "a2", "node_id": "d-over-threshold", "data": "structured", "rules": "explicit", "exceptions": "rare" },
+    { "id": "a3", "node_id": "n-create-po", "data": "semi-structured", "rules": "mixed", "exceptions": "occasional" },
+    { "id": "a4", "node_id": "d-match", "data": "structured", "rules": "explicit", "exceptions": "frequent" },
+    { "id": "a5", "node_id": "n-post-payment", "data": "structured", "rules": "explicit", "exceptions": "rare" }
+  ],
+  "opportunities": [
+    {
+      "id": "op-remove-approval",
+      "title": "Remove approval below a low-value threshold",
+      "rung": "Remove",
+      "committed": true,
+      "score": { "benefit": 3.3, "effort": 1.3 },
+      "quadrant": "Quick Win"
+    },
+    {
+      "id": "op-standardize-tolerance",
+      "title": "Standardize the three-way-match tolerance rule",
+      "rung": "Standardize",
+      "committed": false
+    },
+    {
+      "id": "op-auto-match",
+      "title": "Auto three-way match within tolerance; exceptions to a human",
+      "rung": "Automate",
+      "committed": true,
+      "score": { "benefit": 4.7, "effort": 3.0 },
+      "quadrant": "Strategic",
+      "depends_on": ["op-standardize-tolerance"]
+    },
+    {
+      "id": "op-auto-po",
+      "title": "Auto-create the PO from an approved requisition",
+      "rung": "Automate",
+      "committed": true,
+      "score": { "benefit": 4.0, "effort": 3.3 },
+      "quadrant": "Strategic"
+    },
+    {
+      "id": "op-portal-pull",
+      "title": "Pull invoices straight from the supplier portal",
+      "rung": "Connect",
+      "committed": false
+    },
+    {
+      "id": "op-exception-assistant",
+      "title": "Exception-triage assistant that drafts the likely mismatch cause",
+      "rung": "Assist",
+      "committed": false
+    }
+  ]
+}

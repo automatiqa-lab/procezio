@@ -1,0 +1,1142 @@
+{
+  "format": "pnav",
+  "version": 1,
+  "session_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+  "schema_version": "1.0",
+  "events": [
+    {
+      "session_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "type": "session.started",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "process_name": "Carrier onboarding",
+        "ruleset_hash": "unassigned",
+        "prompt_pack_version": "0.0.0"
+      },
+      "causation_id": null,
+      "correlation_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "54003054-1767-4ae1-a333-9021c98e7fdd",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 1
+    },
+    {
+      "session_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "type": "frame.set",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "name": "Carrier onboarding",
+        "trigger": "A new carrier applies to haul for us",
+        "end_state": "The carrier is verified and active in the TMS",
+        "owner": "Compliance and Logistics Operations",
+        "frequency": "weekly",
+        "volume": "~30 carriers per quarter",
+        "north_star": "Onboarding lead time - application to first booking"
+      },
+      "causation_id": null,
+      "correlation_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "compensates": null,
+      "schema_version": "1.1",
+      "event_id": "1247308a-f640-44a6-bf64-c571e92fd2d5",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 2
+    },
+    {
+      "session_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "type": "node.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "node": {
+          "id": "car-start",
+          "type": "Start",
+          "lane": "carrier",
+          "label": "Carrier applies",
+          "zone": 2
+        },
+        "actor": "Carrier"
+      },
+      "causation_id": null,
+      "correlation_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "a0d6b64e-05d3-4864-8cc5-cb965599e9a6",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 3
+    },
+    {
+      "session_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "type": "node.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "node": {
+          "id": "car-docs",
+          "type": "Step",
+          "lane": "compliance",
+          "label": "Collect documents",
+          "zone": 2
+        },
+        "actor": "Compliance"
+      },
+      "causation_id": null,
+      "correlation_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "f449fa28-be81-4a62-a91c-f1d57ab01d2e",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 4
+    },
+    {
+      "session_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "type": "node.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "node": {
+          "id": "car-complete",
+          "type": "Decision",
+          "lane": "compliance",
+          "label": "Docs complete?",
+          "zone": 2
+        },
+        "actor": "Compliance"
+      },
+      "causation_id": null,
+      "correlation_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "bd52814c-f7f1-409c-9bfd-b644fc73b181",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 5
+    },
+    {
+      "session_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "type": "node.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "node": {
+          "id": "car-chase",
+          "type": "Wait",
+          "lane": "compliance",
+          "label": "Chase missing docs",
+          "zone": 2
+        },
+        "actor": "Compliance"
+      },
+      "causation_id": null,
+      "correlation_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "ab763bb5-3054-4bd0-808e-dc679f497edb",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 6
+    },
+    {
+      "session_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "type": "node.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "node": {
+          "id": "car-insurance",
+          "type": "Step",
+          "lane": "compliance",
+          "label": "Verify insurance",
+          "zone": 2
+        },
+        "actor": "Compliance"
+      },
+      "causation_id": null,
+      "correlation_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "eb76cf7b-7637-40f0-8f62-282537169250",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 7
+    },
+    {
+      "session_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "type": "node.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "node": {
+          "id": "car-credit",
+          "type": "Step",
+          "lane": "finance",
+          "label": "Run credit check",
+          "zone": 2
+        },
+        "actor": "Finance"
+      },
+      "causation_id": null,
+      "correlation_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "63cf7e53-7705-4e08-b40a-7e5daf96b71d",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 8
+    },
+    {
+      "session_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "type": "node.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "node": {
+          "id": "car-setup",
+          "type": "Step",
+          "lane": "ops",
+          "label": "Set up in TMS",
+          "zone": 2
+        },
+        "actor": "Ops"
+      },
+      "causation_id": null,
+      "correlation_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "df0e1f45-449d-4d97-ae76-3d352d489c17",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 9
+    },
+    {
+      "session_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "type": "node.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "node": {
+          "id": "car-end",
+          "type": "End",
+          "lane": "ops",
+          "label": "Carrier active",
+          "zone": 2
+        },
+        "actor": "Ops"
+      },
+      "causation_id": null,
+      "correlation_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "1708aafb-5556-43ff-81de-1fd5d2055012",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 10
+    },
+    {
+      "session_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "type": "edge.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "edge": {
+          "id": "car-e1",
+          "from": "car-start",
+          "to": "car-docs",
+          "kind": "sequence"
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "1a2afbfa-be51-46e1-a531-d90713837117",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 11
+    },
+    {
+      "session_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "type": "edge.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "edge": {
+          "id": "car-e2",
+          "from": "car-docs",
+          "to": "car-complete",
+          "kind": "sequence"
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "cd24df3a-b87d-4d97-b833-9f04d9f76187",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 12
+    },
+    {
+      "session_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "type": "edge.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "edge": {
+          "id": "car-e3",
+          "from": "car-complete",
+          "to": "car-chase",
+          "kind": "sequence",
+          "label": "no"
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "d21ff159-e4d3-4f11-a9cf-9da6a4283d79",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 13
+    },
+    {
+      "session_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "type": "edge.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "edge": {
+          "id": "car-e4",
+          "from": "car-chase",
+          "to": "car-docs",
+          "kind": "sequence"
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "5bece383-5a68-4e8c-8fba-7eb07d64f898",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 14
+    },
+    {
+      "session_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "type": "edge.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "edge": {
+          "id": "car-e5",
+          "from": "car-complete",
+          "to": "car-insurance",
+          "kind": "sequence",
+          "label": "yes"
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "8433487e-e5e3-41d1-9241-9007693ed12c",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 15
+    },
+    {
+      "session_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "type": "edge.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "edge": {
+          "id": "car-e6",
+          "from": "car-insurance",
+          "to": "car-credit",
+          "kind": "sequence"
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "86c636cd-1367-4175-8eba-02f31777add6",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 16
+    },
+    {
+      "session_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "type": "edge.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "edge": {
+          "id": "car-e7",
+          "from": "car-credit",
+          "to": "car-setup",
+          "kind": "sequence"
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "97b28041-e574-4b9b-a760-ca93838d4280",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 17
+    },
+    {
+      "session_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "type": "edge.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "edge": {
+          "id": "car-e8",
+          "from": "car-setup",
+          "to": "car-end",
+          "kind": "sequence"
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "c70a4c75-85dc-443f-991d-1bf38e7d38df",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 18
+    },
+    {
+      "session_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "type": "audit_tag.set",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "audit_tag": {
+          "id": "car-a1",
+          "node_id": "car-docs",
+          "data": "unstructured",
+          "rules": "judgment",
+          "exceptions": "frequent"
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "81ac2fdb-497a-431d-bbf6-60ab4525ed1a",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 19
+    },
+    {
+      "session_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "type": "friction.pinned",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "friction": {
+          "id": "car-f1",
+          "node_id": "car-chase",
+          "waste": "Waiting",
+          "note": "Onboarding stalls waiting on documents the carrier sends piecemeal by email."
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "5f2797d6-4adc-417c-a6a5-46a2614930d2",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 20
+    },
+    {
+      "session_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "type": "friction.pinned",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "friction": {
+          "id": "car-f2",
+          "node_id": "car-insurance",
+          "waste": "Defects",
+          "note": "Insurance certificates are checked by eye, so expired cover slips through."
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "2ec05f68-4791-49cc-bf66-a69555ed5556",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 21
+    },
+    {
+      "session_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "type": "frame.set",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "pain": "Onboarding a new haulier takes weeks of chasing documents by email; loads wait on it.",
+        "north_star": "Cut carrier onboarding from 15 working days to 5."
+      },
+      "causation_id": null,
+      "correlation_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "compensates": null,
+      "schema_version": "1.1",
+      "event_id": "ac2f6d29-dc4c-423d-b699-b6927da13031",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 22
+    },
+    {
+      "session_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "type": "opportunity.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "opportunity": {
+          "id": "69ff4f6c-bd2b-4efb-9618-edc9effc2401",
+          "title": "Self-serve document portal with automated insurance and credit checks",
+          "target_refs": [
+            "car-docs"
+          ]
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "017723aa-b457-4ee5-bb05-b88b5cfcdfab",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 23
+    },
+    {
+      "session_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "type": "assumption.added",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "assumption": {
+          "statement": "Around 20 new carriers are onboarded each quarter.",
+          "source": "Carrier master data, H1",
+          "confidence": "high",
+          "id": "3e825ae9-5c1f-483b-9d79-f55b61d07ab1"
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "a763f468-f37a-43fc-aa7b-de5037fb1161",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 24
+    },
+    {
+      "session_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "type": "assumption.added",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "assumption": {
+          "statement": "Most delay is waiting on the carrier to send documents, not our review.",
+          "source": "gut feel from the onboarding team",
+          "confidence": "low",
+          "id": "fe1bfccc-c17c-4533-92c5-92e2b762f4fd",
+          "verify_by": "Time-stamp the last 10 onboardings: waiting-on-carrier vs our review days."
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "1a01ac32-6b00-4bfe-8fa0-33e954bffff4",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 25
+    },
+    {
+      "session_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "type": "node.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "node": {
+          "id": "car-docs",
+          "type": "Step",
+          "lane": "compliance",
+          "label": "Collect documents",
+          "zone": 2,
+          "step_detail": {
+            "touch_time": {
+              "value": "~45 min",
+              "confidence": "log-checked"
+            }
+          }
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "935644a3-059d-43ab-8440-c97703e92483",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 26
+    },
+    {
+      "session_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "type": "node.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "node": {
+          "id": "car-insurance",
+          "type": "Step",
+          "lane": "compliance",
+          "label": "Verify insurance",
+          "zone": 2,
+          "step_detail": {
+            "touch_time": {
+              "value": "~30 min",
+              "confidence": "log-checked"
+            }
+          }
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "f89e318b-7fc2-4a73-a9bb-8f2b412f7fdd",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 27
+    },
+    {
+      "session_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "type": "node.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "node": {
+          "id": "car-chase",
+          "type": "Wait",
+          "lane": "compliance",
+          "label": "Chase missing docs",
+          "zone": 2,
+          "wait_detail": {
+            "duration": {
+              "value": "~4 days",
+              "confidence": "gut-feel"
+            }
+          }
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "67b70938-3eac-4d16-be9c-6289f5cb492d",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 28
+    },
+    {
+      "session_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "type": "opportunity.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "opportunity": {
+          "id": "69ff4f6c-bd2b-4efb-9618-edc9effc2401",
+          "title": "Self-serve document portal with automated insurance and credit checks",
+          "target_refs": [
+            "car-docs"
+          ],
+          "triage": "Now",
+          "rung": "Automate",
+          "triage_reason": "Document chasing is the whole bottleneck; a portal removes it at the source."
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "0473c4b6-b92a-4a86-9e86-c5161777843f",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 29
+    },
+    {
+      "session_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "type": "opportunity.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "opportunity": {
+          "id": "127d2ab6-5d6e-4542-804b-0c5ede3f9f4e",
+          "title": "Shared carrier scorecard with the transport team"
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "cf37bf11-0a22-46ce-a96e-a6b05e845db5",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 30
+    },
+    {
+      "session_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "type": "opportunity.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "opportunity": {
+          "id": "127d2ab6-5d6e-4542-804b-0c5ede3f9f4e",
+          "title": "Shared carrier scorecard with the transport team",
+          "triage": "Maybe",
+          "triage_reason": "Valuable, but measurement design needs the transport lead - after the portal."
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "fcf7e249-dbd2-4774-9298-662e66289aa3",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 31
+    },
+    {
+      "session_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "type": "score.committed",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "opportunity_id": "69ff4f6c-bd2b-4efb-9618-edc9effc2401",
+        "score": {
+          "benefit": 4,
+          "effort": 3
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "f5ed6702-d97f-4023-9548-f45f72961879",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 32
+    },
+    {
+      "session_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "type": "commitment",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "opportunity_ids": [
+          "69ff4f6c-bd2b-4efb-9618-edc9effc2401"
+        ],
+        "signed_by": "local-user"
+      },
+      "causation_id": null,
+      "correlation_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "compensates": null,
+      "schema_version": "1.2",
+      "event_id": "4fe341d7-b58a-4201-97c7-713e5f29a6e6",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 33
+    },
+    {
+      "session_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "type": "gate.checked",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "opportunity_id": "69ff4f6c-bd2b-4efb-9618-edc9effc2401",
+        "check": "data-privacy",
+        "status": "cleared",
+        "finding": "Reviewed - no blocker for a pilot."
+      },
+      "causation_id": null,
+      "correlation_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "c1d7534b-1f31-4a1e-b04c-594a29903594",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 34
+    },
+    {
+      "session_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "type": "gate.checked",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "opportunity_id": "69ff4f6c-bd2b-4efb-9618-edc9effc2401",
+        "check": "regulatory-compliance",
+        "status": "cleared",
+        "finding": "Reviewed - no blocker for a pilot."
+      },
+      "causation_id": null,
+      "correlation_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "a4a2f98d-3744-4594-ac92-366ff0084c0e",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 35
+    },
+    {
+      "session_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "type": "gate.checked",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "opportunity_id": "69ff4f6c-bd2b-4efb-9618-edc9effc2401",
+        "check": "failure-blast-radius",
+        "status": "cleared",
+        "finding": "Reviewed - no blocker for a pilot."
+      },
+      "causation_id": null,
+      "correlation_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "8d968727-865b-4082-b364-002adb26ef38",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 36
+    },
+    {
+      "session_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "type": "gate.checked",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "opportunity_id": "69ff4f6c-bd2b-4efb-9618-edc9effc2401",
+        "check": "accountability",
+        "status": "cleared",
+        "finding": "Reviewed - no blocker for a pilot."
+      },
+      "causation_id": null,
+      "correlation_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "80a7ca6a-ab8d-4f9f-b3bd-53b2667cd766",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 37
+    },
+    {
+      "session_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "type": "gate.checked",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "opportunity_id": "69ff4f6c-bd2b-4efb-9618-edc9effc2401",
+        "check": "change-impact-on-people",
+        "status": "cleared",
+        "finding": "Reviewed - no blocker for a pilot."
+      },
+      "causation_id": null,
+      "correlation_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "9e5a162e-6c4f-4028-8c35-2b7caad8c67d",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 38
+    },
+    {
+      "session_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "type": "case.drafted",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "opportunity_id": "69ff4f6c-bd2b-4efb-9618-edc9effc2401",
+        "figures": [
+          {
+            "label": "Working days removed from onboarding",
+            "value": "~10 days",
+            "benefit_class": "quality-speed",
+            "source_ref": "car-f1",
+            "kind": "benefit"
+          },
+          {
+            "label": "Portal build + integration effort",
+            "value": "~20 person-days",
+            "source_ref": "car-docs",
+            "kind": "cost"
+          }
+        ],
+        "assumptions": [
+          {
+            "statement": "20 carriers onboarded per quarter",
+            "source": "Carrier master data, H1",
+            "confidence": "high"
+          }
+        ]
+      },
+      "causation_id": null,
+      "correlation_id": "92e1d374-e6ce-4f36-80ae-8b38c2690504",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "484f6f0b-7ea2-4ecb-87ac-e67a33fde090",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 39
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "kind": "templates",
+  "version": "1",
+  "description": "Starting process maps. Each seeds the Understand side of one flow; Diverge and Converge stay empty. Fork one or open a PR to add your own - see registry/README.md.",
+  "entries": [
+    {
+      "id": "p2p",
+      "name": "Purchase-to-Pay (P2P)",
+      "description": "Requisition to payment with a three-way match and a discrepancy chase.",
+      "path": "templates/p2p.json",
+      "author": "Automatiqa Lab",
+      "license": "Apache-2.0",
+      "source": "built-in"
+    },
+    {
+      "id": "o2c",
+      "name": "Order-to-Cash (O2C)",
+      "description": "Customer order through credit, fulfilment, invoicing and collection.",
+      "path": "templates/o2c.json",
+      "author": "Automatiqa Lab",
+      "license": "Apache-2.0",
+      "source": "built-in"
+    },
+    {
+      "id": "carrier",
+      "name": "Carrier onboarding",
+      "description": "New haulier from application to active in the TMS, with document, insurance and credit checks.",
+      "path": "templates/carrier.json",
+      "author": "Automatiqa Lab",
+      "license": "Apache-2.0",
+      "source": "built-in"
+    }
+  ]
+}
