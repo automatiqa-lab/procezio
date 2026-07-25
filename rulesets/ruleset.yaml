@@ -1,0 +1,131 @@
+# Process Navigator - starter ruleset (crown-jewel methodology artifact).
+#
+# The deterministic control plane (constitution p10 / AGENTS.md layering
+# principle): these versioned rules decide WHETHER the agent reacts; the LLM only
+# later decides HOW to word each firing. Every `when` is DATA - a predicate tree
+# the C12 engine (core/src/rule-engine.ts) walks. There is no code here to run.
+#
+# Each rule carries the required id / when / severity. message_template is stored
+# VERBATIM (rendering into human text is a later LLM-wording task, not this file's
+# job). budget_class / cooldown / min_tier are carried for the later budget and
+# cooldown stage (C14) - read there, never acted on by C12.
+#
+# Paths are dotted and never positional (no nodes.0, no friction.1). Collection
+# reasoning goes through the exists/every quantifiers instead, so a rule stays
+# correct no matter where an element sits in its array.
+version: "0.4.0"
+rules:
+  # Zone 6 - anti-anchoring (spec v0.2 s.9, s.10). The agent is silent on scores
+  # until the user commits; it then fires at most one evidence-cited challenge.
+  # Keyed ONLY on score.committed, so no pre-commit score commentary is possible.
+  - id: zone6-anti-anchoring
+    when:
+      event_type: score.committed
+    severity: challenge
+    min_tier: T1
+    budget_class: zone6
+    cooldown: per_commit
+    message_template: "You committed this score. Check it against your zone-2 and zone-4 evidence before moving on - keep it or revise it."
+
+  # Zone 6 - the Challenger wakes ONLY on the commitment ceremony (spec 01b s.5, D1).
+  # Anti-anchoring made an event: the signing ceremony writes an irreversible commitment,
+  # and that commitment is the sole trigger that lets the Challenger speak. Before it -
+  # while the user is still scoring - this rule cannot match, so no challenge is structurally
+  # possible. This is the v0.4 ceremony-gated wake; the score.committed rule above still nudges
+  # each individual commit against its evidence.
+  - id: zone6-challenger-wake
+    when:
+      event_type: commitment
+    severity: challenge
+    min_tier: T1
+    budget_class: zone6
+    cooldown: per_commit
+    message_template: "You have signed off these scores. Now the Challenger looks: does each committed score hold up against your map and your evidence?"
+
+  # Zone 1 - the north-star metric is the anchor every later score answers to. If
+  # the user closes a zone with it still blank, nudge them to name the one number.
+  - id: zone1-north-star
+    when:
+      all:
+        - event_type: zone.completed
+        - path: process.north_star
+          op: eq
+          value: ""
+    severity: nudge
+    budget_class: zone1
+    message_template: "This zone is done, but the north-star metric is still blank. Name the one number this process answers to."
+
+  # Zone 2 - probe untagged nodes. Fires on a new node when AT LEAST ONE step still
+  # has no system tagged (existential over nodes, position-independent).
+  - id: zone2-node-untagged
+    when:
+      all:
+        - event_type: node.created
+        - exists:
+            in: nodes
+            where:
+              not:
+                path: metadata.system
+                op: exists
+    severity: nudge
+    budget_class: zone2
+    message_template: "At least one step has no system tagged. Add the system so the automation read is grounded in what the work actually touches."
+
+  # Zone 3 - friction pass. On closing a zone that already has mapped steps but no
+  # pinned friction, ask where the process leaks. Existential over nodes AND a
+  # none-over-friction (not-exists), both position-independent.
+  - id: zone3-friction-missing
+    when:
+      all:
+        - event_type: zone.completed
+        - exists:
+            in: nodes
+            where:
+              path: id
+              op: exists
+        - not:
+            exists:
+              in: friction
+              where:
+                path: id
+                op: exists
+    severity: nudge
+    budget_class: zone3
+    message_template: "You mapped the steps but pinned no friction. Where does this process leak time, rework, or waiting?"
+
+  # Facilitator - pacing (spec 01b s.4/B2: "timebox/energy prompts, go deeper vs
+  # move on"). The Facilitator paces, never touches content. Where the Auditor's
+  # gap-probes above fire on what is MISSING, this fires on what is DONE: a zone
+  # closed with real depth (friction pinned) AND the frame already anchored (a
+  # north-star is set). Those two guards make it mutually exclusive with
+  # zone1-north-star (which needs north_star == "") and zone3-friction-missing
+  # (which needs NO friction) - so it only speaks when the zone is genuinely in
+  # good shape, offering the go-deeper-or-move-on choice instead of a gap nudge.
+  # It never blocks: severity is a nudge, and the wording leaves the pace to the user.
+  - id: pacing-go-deeper
+    when:
+      all:
+        - event_type: zone.completed
+        - path: process.north_star
+          op: neq
+          value: ""
+        - exists:
+            in: friction
+            where:
+              path: id
+              op: exists
+    severity: nudge
+    min_tier: T0
+    budget_class: facilitator
+    cooldown: per_zone
+    message_template: "Good depth here - steps mapped and friction pinned. You can go deeper on any of it, or move on to the next zone. Your pace, not mine."
+
+  # Zone 7 - risk gate. On any gate check, nudge the user to review open items
+  # before the case is drafted.
+  - id: zone7-risk-gate
+    when:
+      event_type: gate.checked
+    severity: nudge
+    min_tier: T0
+    budget_class: zone7
+    message_template: "A risk gate was checked. Review any open items before you draft the business case."

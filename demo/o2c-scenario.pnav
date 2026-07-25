@@ -1,0 +1,1200 @@
+{
+  "format": "pnav",
+  "version": 1,
+  "session_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+  "schema_version": "1.0",
+  "events": [
+    {
+      "session_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "type": "session.started",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "process_name": "Order-to-Cash",
+        "ruleset_hash": "unassigned",
+        "prompt_pack_version": "0.0.0"
+      },
+      "causation_id": null,
+      "correlation_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "7ac54dc9-de71-4d2c-964d-10ee99b159bc",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 1
+    },
+    {
+      "session_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "type": "frame.set",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "name": "Order-to-Cash",
+        "trigger": "A customer places an order",
+        "end_state": "Cash is received and the order is closed",
+        "owner": "Sales and Finance",
+        "frequency": "daily",
+        "volume": "~900 orders per month",
+        "north_star": "Days sales outstanding - order to cash received"
+      },
+      "causation_id": null,
+      "correlation_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "compensates": null,
+      "schema_version": "1.1",
+      "event_id": "7ce7dd0d-312a-4d24-a74b-447b0a21f5da",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 2
+    },
+    {
+      "session_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "type": "node.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "node": {
+          "id": "o2c-start",
+          "type": "Start",
+          "lane": "customer",
+          "label": "Order placed",
+          "zone": 2
+        },
+        "actor": "Customer"
+      },
+      "causation_id": null,
+      "correlation_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "1fa23432-55a5-4583-9393-1b22af01cc7a",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 3
+    },
+    {
+      "session_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "type": "node.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "node": {
+          "id": "o2c-enter",
+          "type": "Step",
+          "lane": "sales",
+          "label": "Enter order",
+          "zone": 2
+        },
+        "actor": "Sales"
+      },
+      "causation_id": null,
+      "correlation_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "12fd2b15-7a74-4e8a-a0de-d6d3e43c0abd",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 4
+    },
+    {
+      "session_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "type": "node.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "node": {
+          "id": "o2c-credit",
+          "type": "Decision",
+          "lane": "finance",
+          "label": "Credit OK?",
+          "zone": 2
+        },
+        "actor": "Finance"
+      },
+      "causation_id": null,
+      "correlation_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "1149ff76-9d62-4cb3-800c-d7b3ed38d320",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 5
+    },
+    {
+      "session_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "type": "node.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "node": {
+          "id": "o2c-hold",
+          "type": "Wait",
+          "lane": "finance",
+          "label": "Credit hold",
+          "zone": 2
+        },
+        "actor": "Finance"
+      },
+      "causation_id": null,
+      "correlation_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "3d4c9175-b8e5-4966-8c36-071f37b05172",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 6
+    },
+    {
+      "session_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "type": "node.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "node": {
+          "id": "o2c-pick",
+          "type": "Step",
+          "lane": "fulfilment",
+          "label": "Pick and pack",
+          "zone": 2
+        },
+        "actor": "Fulfilment"
+      },
+      "causation_id": null,
+      "correlation_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "95e531ba-9f38-4611-a5dc-fe7824aab380",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 7
+    },
+    {
+      "session_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "type": "node.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "node": {
+          "id": "o2c-ship",
+          "type": "Step",
+          "lane": "fulfilment",
+          "label": "Ship order",
+          "zone": 2
+        },
+        "actor": "Fulfilment"
+      },
+      "causation_id": null,
+      "correlation_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "4d8b524e-12da-478b-bfc6-85525f834695",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 8
+    },
+    {
+      "session_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "type": "node.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "node": {
+          "id": "o2c-invoice",
+          "type": "Step",
+          "lane": "finance",
+          "label": "Raise invoice",
+          "zone": 2
+        },
+        "actor": "Finance"
+      },
+      "causation_id": null,
+      "correlation_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "c8332d8c-cb98-4a52-b8bb-fe1edcdab18e",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 9
+    },
+    {
+      "session_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "type": "node.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "node": {
+          "id": "o2c-collect",
+          "type": "Step",
+          "lane": "finance",
+          "label": "Collect payment",
+          "zone": 2
+        },
+        "actor": "Finance"
+      },
+      "causation_id": null,
+      "correlation_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "493a9a06-660e-438d-b753-e80d2377d067",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 10
+    },
+    {
+      "session_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "type": "node.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "node": {
+          "id": "o2c-end",
+          "type": "End",
+          "lane": "finance",
+          "label": "Cash received",
+          "zone": 2
+        },
+        "actor": "Finance"
+      },
+      "causation_id": null,
+      "correlation_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "def1286b-4fb0-420e-bd1f-2fbcf1dd83df",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 11
+    },
+    {
+      "session_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "type": "edge.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "edge": {
+          "id": "o2c-e1",
+          "from": "o2c-start",
+          "to": "o2c-enter",
+          "kind": "sequence"
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "9780893d-1f38-4047-8928-0441ed3ff87a",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 12
+    },
+    {
+      "session_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "type": "edge.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "edge": {
+          "id": "o2c-e2",
+          "from": "o2c-enter",
+          "to": "o2c-credit",
+          "kind": "sequence"
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "3d3f53c4-01f2-4a9c-96de-585155f6d519",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 13
+    },
+    {
+      "session_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "type": "edge.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "edge": {
+          "id": "o2c-e3",
+          "from": "o2c-credit",
+          "to": "o2c-hold",
+          "kind": "sequence",
+          "label": "no"
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "79190619-5929-4cfb-99ef-6fad64b8a23e",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 14
+    },
+    {
+      "session_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "type": "edge.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "edge": {
+          "id": "o2c-e4",
+          "from": "o2c-hold",
+          "to": "o2c-credit",
+          "kind": "sequence"
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "a9997c2b-e1f3-42ac-b2ee-58831c268e1f",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 15
+    },
+    {
+      "session_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "type": "edge.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "edge": {
+          "id": "o2c-e5",
+          "from": "o2c-credit",
+          "to": "o2c-pick",
+          "kind": "sequence",
+          "label": "yes"
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "d05da6d0-853a-497f-ad15-83c7bfe4fc9b",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 16
+    },
+    {
+      "session_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "type": "edge.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "edge": {
+          "id": "o2c-e6",
+          "from": "o2c-pick",
+          "to": "o2c-ship",
+          "kind": "sequence"
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "3c18720f-4861-4413-ba69-67f96ab93316",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 17
+    },
+    {
+      "session_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "type": "edge.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "edge": {
+          "id": "o2c-e7",
+          "from": "o2c-ship",
+          "to": "o2c-invoice",
+          "kind": "sequence"
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "788ebaa2-55fc-4e7f-b19f-ad9a31a2f389",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 18
+    },
+    {
+      "session_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "type": "edge.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "edge": {
+          "id": "o2c-e8",
+          "from": "o2c-invoice",
+          "to": "o2c-collect",
+          "kind": "sequence"
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "e558fbb4-8527-4c35-9d20-8346c4b8f72c",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 19
+    },
+    {
+      "session_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "type": "edge.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "edge": {
+          "id": "o2c-e9",
+          "from": "o2c-collect",
+          "to": "o2c-end",
+          "kind": "sequence"
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "0e30f92d-60cc-490d-8eb5-2af56b9569d9",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 20
+    },
+    {
+      "session_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "type": "audit_tag.set",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "audit_tag": {
+          "id": "o2c-a1",
+          "node_id": "o2c-credit",
+          "data": "structured",
+          "rules": "explicit",
+          "exceptions": "occasional"
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "dc9ace53-c178-4e91-8e61-191f6ab30942",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 21
+    },
+    {
+      "session_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "type": "friction.pinned",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "friction": {
+          "id": "o2c-f1",
+          "node_id": "o2c-hold",
+          "waste": "Waiting",
+          "note": "Orders sit on credit hold while finance and sales reconcile limits by email."
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "d1a15b1a-57b9-472d-896a-204d58dba498",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 22
+    },
+    {
+      "session_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "type": "friction.pinned",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "friction": {
+          "id": "o2c-f2",
+          "node_id": "o2c-collect",
+          "waste": "Motion",
+          "note": "Collections chase the same accounts every month with no shared ledger."
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "4297e3cb-53c9-4486-bd6c-98530c208344",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 23
+    },
+    {
+      "session_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "type": "frame.set",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "pain": "Orders stall on credit holds and nobody sees them until the customer calls, angry.",
+        "north_star": "Cut days-sales-outstanding from 45 to 30."
+      },
+      "causation_id": null,
+      "correlation_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "compensates": null,
+      "schema_version": "1.1",
+      "event_id": "0e6be855-b6a9-4197-866c-223759d1e8be",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 24
+    },
+    {
+      "session_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "type": "opportunity.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "opportunity": {
+          "id": "dcd02bf6-7132-4844-a5ce-c674a85babe5",
+          "title": "Auto-release low-risk orders under the credit threshold",
+          "target_refs": [
+            "o2c-enter"
+          ]
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "bc734f2b-e474-4092-b7a3-1f0586973ac7",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 25
+    },
+    {
+      "session_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "type": "assumption.added",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "assumption": {
+          "statement": "About 60% of orders sit under the auto-release credit threshold.",
+          "source": "Credit team export, Q2",
+          "confidence": "high",
+          "id": "fd5abfa1-98ba-4cc3-8760-f8bceab8ab9e"
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "364283c6-d205-47f7-af94-643664ce5ec9",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 26
+    },
+    {
+      "session_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "type": "assumption.added",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "assumption": {
+          "statement": "Most credit holds clear with no change - they just wait for a human.",
+          "source": "gut feel from the collections desk",
+          "confidence": "low",
+          "id": "088cdcd7-d97d-44c1-94e2-05719b777e46",
+          "verify_by": "Pull two weeks of credit-hold releases and count the no-change clears."
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "315b0811-4b40-4bb0-b2c4-9608209bf5de",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 27
+    },
+    {
+      "session_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "type": "node.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "node": {
+          "id": "o2c-enter",
+          "type": "Step",
+          "lane": "sales",
+          "label": "Enter order",
+          "zone": 2,
+          "step_detail": {
+            "touch_time": {
+              "value": "~15 min",
+              "confidence": "log-checked"
+            }
+          }
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "6411a9dc-4b58-47b8-8600-d0615439e320",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 28
+    },
+    {
+      "session_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "type": "node.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "node": {
+          "id": "o2c-pick",
+          "type": "Step",
+          "lane": "fulfilment",
+          "label": "Pick and pack",
+          "zone": 2,
+          "step_detail": {
+            "touch_time": {
+              "value": "~5 min",
+              "confidence": "log-checked"
+            }
+          }
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "ee5fb599-d97d-484e-8844-0de496cb7915",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 29
+    },
+    {
+      "session_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "type": "node.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "node": {
+          "id": "o2c-hold",
+          "type": "Wait",
+          "lane": "finance",
+          "label": "Credit hold",
+          "zone": 2,
+          "wait_detail": {
+            "duration": {
+              "value": "~1.5 days",
+              "confidence": "gut-feel"
+            }
+          }
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "41f2318f-f349-4fdc-a001-0c5055a3da8e",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 30
+    },
+    {
+      "session_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "type": "opportunity.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "opportunity": {
+          "id": "dcd02bf6-7132-4844-a5ce-c674a85babe5",
+          "title": "Auto-release low-risk orders under the credit threshold",
+          "target_refs": [
+            "o2c-enter"
+          ],
+          "triage": "Now",
+          "rung": "Automate",
+          "triage_reason": "Six of ten orders are provably low-risk - the release rule is already written."
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "39f704ca-7759-4a90-b841-33bed950a9f9",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 31
+    },
+    {
+      "session_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "type": "opportunity.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "opportunity": {
+          "id": "689849ff-d331-41ec-828a-24684100a03d",
+          "title": "Automated dunning reminders for overdue invoices"
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "76cb593e-7632-402e-872a-0205340d946e",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 32
+    },
+    {
+      "session_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "type": "opportunity.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "opportunity": {
+          "id": "689849ff-d331-41ec-828a-24684100a03d",
+          "title": "Automated dunning reminders for overdue invoices",
+          "triage": "Maybe",
+          "triage_reason": "Helps DSO too, but collections owns the tooling - park until the pilot proves out."
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "5b162fe1-7388-478e-a04f-4e5ec1d26afe",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 33
+    },
+    {
+      "session_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "type": "score.committed",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "opportunity_id": "dcd02bf6-7132-4844-a5ce-c674a85babe5",
+        "score": {
+          "benefit": 5,
+          "effort": 3
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "36b7b7e4-3cc8-48cc-8d6d-b3c0f5632256",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 34
+    },
+    {
+      "session_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "type": "commitment",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "opportunity_ids": [
+          "dcd02bf6-7132-4844-a5ce-c674a85babe5"
+        ],
+        "signed_by": "local-user"
+      },
+      "causation_id": null,
+      "correlation_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "compensates": null,
+      "schema_version": "1.2",
+      "event_id": "ec77c9a2-65bf-44bd-9fcc-5ca2a8906e9b",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 35
+    },
+    {
+      "session_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "type": "gate.checked",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "opportunity_id": "dcd02bf6-7132-4844-a5ce-c674a85babe5",
+        "check": "data-privacy",
+        "status": "cleared",
+        "finding": "Reviewed - no blocker for a pilot."
+      },
+      "causation_id": null,
+      "correlation_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "f9aa8b6d-62b6-474f-9f6d-c4e1e643f991",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 36
+    },
+    {
+      "session_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "type": "gate.checked",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "opportunity_id": "dcd02bf6-7132-4844-a5ce-c674a85babe5",
+        "check": "regulatory-compliance",
+        "status": "cleared",
+        "finding": "Reviewed - no blocker for a pilot."
+      },
+      "causation_id": null,
+      "correlation_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "a289911f-3f44-4648-880c-a591ae63a1a5",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 37
+    },
+    {
+      "session_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "type": "gate.checked",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "opportunity_id": "dcd02bf6-7132-4844-a5ce-c674a85babe5",
+        "check": "failure-blast-radius",
+        "status": "cleared",
+        "finding": "Reviewed - no blocker for a pilot."
+      },
+      "causation_id": null,
+      "correlation_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "218f0448-3bd6-4cc8-a8a1-94e7c775827d",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 38
+    },
+    {
+      "session_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "type": "gate.checked",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "opportunity_id": "dcd02bf6-7132-4844-a5ce-c674a85babe5",
+        "check": "accountability",
+        "status": "cleared",
+        "finding": "Reviewed - no blocker for a pilot."
+      },
+      "causation_id": null,
+      "correlation_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "f2d5cbc1-835e-4a06-85ed-50ba6a90f024",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 39
+    },
+    {
+      "session_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "type": "gate.checked",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "opportunity_id": "dcd02bf6-7132-4844-a5ce-c674a85babe5",
+        "check": "change-impact-on-people",
+        "status": "cleared",
+        "finding": "Reviewed - no blocker for a pilot."
+      },
+      "causation_id": null,
+      "correlation_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "c111e4da-8193-46f3-b0fa-b547a0820042",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 40
+    },
+    {
+      "session_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "type": "case.drafted",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "opportunity_id": "dcd02bf6-7132-4844-a5ce-c674a85babe5",
+        "figures": [
+          {
+            "label": "Order-to-ship days removed on low-risk orders",
+            "value": "~1.5 days",
+            "benefit_class": "quality-speed",
+            "source_ref": "o2c-f1",
+            "kind": "benefit"
+          },
+          {
+            "label": "Credit-rules setup + finance sign-off effort",
+            "value": "~10 person-days",
+            "source_ref": "o2c-enter",
+            "kind": "cost"
+          }
+        ],
+        "assumptions": [
+          {
+            "statement": "60% of orders are low-risk",
+            "source": "Credit team export, Q2",
+            "confidence": "high"
+          }
+        ]
+      },
+      "causation_id": null,
+      "correlation_id": "346ab134-8e45-40cf-9b10-cb96a647f555",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "6e4b6f0d-c309-4602-b7da-a06ede6b862e",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 41
+    }
+  ]
+}

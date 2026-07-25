@@ -1,0 +1,11 @@
+# Default owner for everything.
+*                       @alxsidr
+
+# Crown-jewel methodology artifacts - changes are amendments; require explicit review.
+/schema/canvas.schema.json   @alxsidr
+/rulesets/                   @alxsidr
+/prompt-packs/               @alxsidr
+
+# The security surface.
+/scripts/gates/security-solo.mjs   @alxsidr
+/app/index.html                    @alxsidr

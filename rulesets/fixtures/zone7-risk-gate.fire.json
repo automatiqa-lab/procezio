@@ -1,0 +1,36 @@
+{
+  "projection": {
+    "schema_version": "1.0",
+    "process": {
+      "name": "Order to Cash",
+      "trigger": "PO received",
+      "end_state": "Cash collected",
+      "owner": "ops",
+      "north_star": "DSO < 30 days"
+    },
+    "lanes": [{ "id": "lane-ops", "actor": "Ops" }],
+    "nodes": [
+      { "id": "n1", "type": "Start", "lane": "lane-ops", "label": "Start", "metadata": { "system": "Email" } },
+      { "id": "n2", "type": "Step", "lane": "lane-ops", "label": "Match invoice", "metadata": { "system": "SAP" } }
+    ],
+    "edges": [{ "id": "e1", "from": "n1", "to": "n2", "kind": "sequence" }],
+    "zones": [{ "id": 7, "phase": "Converge", "name": "Risk gate" }],
+    "friction": [{ "id": "fr1", "waste": "Waiting", "node_id": "n2" }],
+    "opportunities": [
+      { "id": "o1", "title": "Auto-match invoice", "rung": "Automate", "committed": true, "score": { "benefit": 4, "effort": 2 } }
+    ]
+  },
+  "event": {
+    "event_id": "10000000-0000-4000-8000-000000000007",
+    "session_id": "aaaaaaaa-0000-4000-8000-00000000000a",
+    "seq": 15,
+    "type": "gate.checked",
+    "author": { "kind": "human", "id": "user-1" },
+    "provenance": { "state": "ink", "accepted_by": null, "accepted_at": null },
+    "payload": { "opportunity_id": "o1", "check": "data-privacy", "status": "open" },
+    "correlation_id": "bbbbbbbb-0000-4000-8000-00000000000b",
+    "schema_version": "1.0",
+    "ts": "2026-07-06T10:00:00Z"
+  },
+  "expected": ["zone7-risk-gate"]
+}

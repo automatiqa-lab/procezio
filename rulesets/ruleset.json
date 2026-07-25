@@ -1,0 +1,141 @@
+{
+  "version": "0.4.0",
+  "rules": [
+    {
+      "id": "zone6-anti-anchoring",
+      "when": {
+        "event_type": "score.committed"
+      },
+      "severity": "challenge",
+      "min_tier": "T1",
+      "budget_class": "zone6",
+      "cooldown": "per_commit",
+      "message_template": "You committed this score. Check it against your zone-2 and zone-4 evidence before moving on - keep it or revise it."
+    },
+    {
+      "id": "zone6-challenger-wake",
+      "when": {
+        "event_type": "commitment"
+      },
+      "severity": "challenge",
+      "min_tier": "T1",
+      "budget_class": "zone6",
+      "cooldown": "per_commit",
+      "message_template": "You have signed off these scores. Now the Challenger looks: does each committed score hold up against your map and your evidence?"
+    },
+    {
+      "id": "zone1-north-star",
+      "when": {
+        "all": [
+          {
+            "event_type": "zone.completed"
+          },
+          {
+            "path": "process.north_star",
+            "op": "eq",
+            "value": ""
+          }
+        ]
+      },
+      "severity": "nudge",
+      "budget_class": "zone1",
+      "message_template": "This zone is done, but the north-star metric is still blank. Name the one number this process answers to."
+    },
+    {
+      "id": "zone2-node-untagged",
+      "when": {
+        "all": [
+          {
+            "event_type": "node.created"
+          },
+          {
+            "exists": {
+              "in": "nodes",
+              "where": {
+                "not": {
+                  "path": "metadata.system",
+                  "op": "exists"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "severity": "nudge",
+      "budget_class": "zone2",
+      "message_template": "At least one step has no system tagged. Add the system so the automation read is grounded in what the work actually touches."
+    },
+    {
+      "id": "zone3-friction-missing",
+      "when": {
+        "all": [
+          {
+            "event_type": "zone.completed"
+          },
+          {
+            "exists": {
+              "in": "nodes",
+              "where": {
+                "path": "id",
+                "op": "exists"
+              }
+            }
+          },
+          {
+            "not": {
+              "exists": {
+                "in": "friction",
+                "where": {
+                  "path": "id",
+                  "op": "exists"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "severity": "nudge",
+      "budget_class": "zone3",
+      "message_template": "You mapped the steps but pinned no friction. Where does this process leak time, rework, or waiting?"
+    },
+    {
+      "id": "pacing-go-deeper",
+      "when": {
+        "all": [
+          {
+            "event_type": "zone.completed"
+          },
+          {
+            "path": "process.north_star",
+            "op": "neq",
+            "value": ""
+          },
+          {
+            "exists": {
+              "in": "friction",
+              "where": {
+                "path": "id",
+                "op": "exists"
+              }
+            }
+          }
+        ]
+      },
+      "severity": "nudge",
+      "min_tier": "T0",
+      "budget_class": "facilitator",
+      "cooldown": "per_zone",
+      "message_template": "Good depth here - steps mapped and friction pinned. You can go deeper on any of it, or move on to the next zone. Your pace, not mine."
+    },
+    {
+      "id": "zone7-risk-gate",
+      "when": {
+        "event_type": "gate.checked"
+      },
+      "severity": "nudge",
+      "min_tier": "T0",
+      "budget_class": "zone7",
+      "message_template": "A risk gate was checked. Review any open items before you draft the business case."
+    }
+  ]
+}

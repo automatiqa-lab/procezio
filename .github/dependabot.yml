@@ -1,0 +1,31 @@
+version: 2
+updates:
+  # Runtime + dev dependencies (pnpm workspace). Grouped so updates arrive as a few
+  # reviewable PRs, not a flood. The license gate + ci:all catch anything that breaks
+  # the allowlist or the tests.
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      dev-dependencies:
+        dependency-type: development
+      production-dependencies:
+        dependency-type: production
+    ignore:
+      # Majors are deliberate migrations (React, TypeScript, ESLint, Vite move the
+      # whole toolchain) - they get their own reviewed card, never a group bump.
+      - dependency-name: '*'
+        update-types: ['version-update:semver-major']
+      # ajv and json-schema-to-typescript are DETERMINISM PINS: the schema types and
+      # the precompiled validators are generated from them and drift-gated in CI, so
+      # any bump must land together with the --write regeneration - by hand.
+      - dependency-name: ajv
+      - dependency-name: json-schema-to-typescript
+
+  # Keep the GitHub Actions we use current (security-relevant: pinned action versions).
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly

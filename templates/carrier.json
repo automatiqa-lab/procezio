@@ -1,0 +1,69 @@
+{
+  "id": "carrier",
+  "name": "Carrier onboarding",
+  "description": "A new haulier from application to active in the TMS, with document, insurance and credit checks. Understand zones are seeded; Diverge and Converge are left empty so the ideas are yours.",
+  "frame": {
+    "name": "Carrier onboarding",
+    "trigger": "A new carrier applies to haul for us",
+    "end_state": "The carrier is verified and active in the TMS",
+    "owner": "Compliance and Logistics Operations",
+    "frequency": "weekly",
+    "volume": "~30 carriers per quarter",
+    "north_star": "Onboarding lead time - application to first booking"
+  },
+  "nodes": [
+    { "id": "car-start", "type": "Start", "lane": "Carrier", "label": "Carrier applies" },
+    { "id": "car-docs", "type": "Step", "lane": "Compliance", "label": "Collect documents" },
+    { "id": "car-complete", "type": "Decision", "lane": "Compliance", "label": "Docs complete?" },
+    { "id": "car-chase", "type": "Wait", "lane": "Compliance", "label": "Chase missing docs" },
+    { "id": "car-insurance", "type": "Step", "lane": "Compliance", "label": "Verify insurance" },
+    { "id": "car-credit", "type": "Step", "lane": "Finance", "label": "Run credit check" },
+    { "id": "car-setup", "type": "Step", "lane": "Ops", "label": "Set up in TMS" },
+    { "id": "car-end", "type": "End", "lane": "Ops", "label": "Carrier active" }
+  ],
+  "edges": [
+    { "id": "car-e1", "from": "car-start", "to": "car-docs", "kind": "sequence" },
+    { "id": "car-e2", "from": "car-docs", "to": "car-complete", "kind": "sequence" },
+    {
+      "id": "car-e3",
+      "from": "car-complete",
+      "to": "car-chase",
+      "kind": "sequence",
+      "label": "no"
+    },
+    { "id": "car-e4", "from": "car-chase", "to": "car-docs", "kind": "sequence" },
+    {
+      "id": "car-e5",
+      "from": "car-complete",
+      "to": "car-insurance",
+      "kind": "sequence",
+      "label": "yes"
+    },
+    { "id": "car-e6", "from": "car-insurance", "to": "car-credit", "kind": "sequence" },
+    { "id": "car-e7", "from": "car-credit", "to": "car-setup", "kind": "sequence" },
+    { "id": "car-e8", "from": "car-setup", "to": "car-end", "kind": "sequence" }
+  ],
+  "audit_tags": [
+    {
+      "id": "car-a1",
+      "node_id": "car-docs",
+      "data": "unstructured",
+      "rules": "judgment",
+      "exceptions": "frequent"
+    }
+  ],
+  "friction": [
+    {
+      "id": "car-f1",
+      "node_id": "car-chase",
+      "waste": "Waiting",
+      "note": "Onboarding stalls waiting on documents the carrier sends piecemeal by email."
+    },
+    {
+      "id": "car-f2",
+      "node_id": "car-insurance",
+      "waste": "Defects",
+      "note": "Insurance certificates are checked by eye, so expired cover slips through."
+    }
+  ]
+}

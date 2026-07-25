@@ -1,0 +1,151 @@
+[
+  {
+    "event_id": "00000001-0000-4000-8000-000000000001",
+    "session_id": "5f3e9b2a-1c4d-4e6f-8a1b-2c3d4e5f6071",
+    "seq": 0,
+    "type": "session.started",
+    "author": { "kind": "human", "id": "user-1" },
+    "provenance": { "state": "ink", "accepted_by": null, "accepted_at": null },
+    "payload": {
+      "process_name": "Procure-to-Pay, indirect goods",
+      "ruleset_hash": "sha256:0f1e2d3c",
+      "prompt_pack_version": "0.1.0",
+      "model_ref": "ollama/llama3.1"
+    },
+    "causation_id": "cmd-1",
+    "correlation_id": "5f3e9b2a-1c4d-4e6f-8a1b-2c3d4e5f6071",
+    "compensates": null,
+    "schema_version": "1.0",
+    "ts": "2026-07-06T10:00:00Z"
+  },
+  {
+    "event_id": "00000002-0000-4000-8000-000000000002",
+    "session_id": "5f3e9b2a-1c4d-4e6f-8a1b-2c3d4e5f6071",
+    "seq": 1,
+    "type": "zone.completed",
+    "author": { "kind": "human", "id": "user-1" },
+    "provenance": { "state": "ink" },
+    "payload": { "zone_id": 1, "phase": "Understand" },
+    "correlation_id": "5f3e9b2a-1c4d-4e6f-8a1b-2c3d4e5f6071",
+    "schema_version": "1.0",
+    "ts": "2026-07-06T10:01:00Z"
+  },
+  {
+    "event_id": "00000003-0000-4000-8000-000000000003",
+    "session_id": "5f3e9b2a-1c4d-4e6f-8a1b-2c3d4e5f6071",
+    "seq": 2,
+    "type": "node.created",
+    "author": { "kind": "agent", "id": "agent", "model_ref": "ollama/llama3.1" },
+    "provenance": { "state": "pencil", "accepted_by": null, "accepted_at": null },
+    "payload": {
+      "node": { "id": "n-raise-req", "type": "Step", "lane": "requester", "label": "Raise requisition", "zone": 2 }
+    },
+    "causation_id": "rule-seed-map",
+    "correlation_id": "5f3e9b2a-1c4d-4e6f-8a1b-2c3d4e5f6071",
+    "schema_version": "1.0",
+    "ts": "2026-07-06T10:02:00Z"
+  },
+  {
+    "event_id": "00000004-0000-4000-8000-000000000004",
+    "session_id": "5f3e9b2a-1c4d-4e6f-8a1b-2c3d4e5f6071",
+    "seq": 3,
+    "type": "node.created",
+    "author": { "kind": "human", "id": "user-1" },
+    "provenance": { "state": "ink" },
+    "payload": {
+      "node": { "id": "n-wait-approval", "type": "Wait", "lane": "manager", "label": "Await manager approval", "zone": 2 }
+    },
+    "causation_id": "cmd-draw-2",
+    "correlation_id": "5f3e9b2a-1c4d-4e6f-8a1b-2c3d4e5f6071",
+    "schema_version": "1.0",
+    "ts": "2026-07-06T10:03:00Z"
+  },
+  {
+    "event_id": "00000005-0000-4000-8000-000000000005",
+    "session_id": "5f3e9b2a-1c4d-4e6f-8a1b-2c3d4e5f6071",
+    "seq": 4,
+    "type": "edge.created",
+    "author": { "kind": "human", "id": "user-1" },
+    "provenance": { "state": "ink" },
+    "payload": {
+      "edge": { "id": "e1", "from": "n-raise-req", "to": "n-wait-approval", "kind": "sequence" }
+    },
+    "correlation_id": "5f3e9b2a-1c4d-4e6f-8a1b-2c3d4e5f6071",
+    "schema_version": "1.0",
+    "ts": "2026-07-06T10:04:00Z"
+  },
+  {
+    "event_id": "00000006-0000-4000-8000-000000000006",
+    "session_id": "5f3e9b2a-1c4d-4e6f-8a1b-2c3d4e5f6071",
+    "seq": 5,
+    "type": "friction.pinned",
+    "author": { "kind": "human", "id": "user-1" },
+    "provenance": { "state": "ink" },
+    "payload": {
+      "friction": { "id": "f1", "waste": "Waiting", "node_id": "n-wait-approval", "note": "manager inbox delay" }
+    },
+    "correlation_id": "5f3e9b2a-1c4d-4e6f-8a1b-2c3d4e5f6071",
+    "schema_version": "1.0",
+    "ts": "2026-07-06T10:05:00Z"
+  },
+  {
+    "event_id": "00000007-0000-4000-8000-000000000007",
+    "session_id": "5f3e9b2a-1c4d-4e6f-8a1b-2c3d4e5f6071",
+    "seq": 6,
+    "type": "friction.pinned",
+    "author": { "kind": "human", "id": "user-1" },
+    "provenance": { "state": "ink" },
+    "payload": {
+      "friction": { "id": "f2", "waste": "Motion", "node_id": "n-raise-req", "note": "re-keys the request into a second system" }
+    },
+    "correlation_id": "5f3e9b2a-1c4d-4e6f-8a1b-2c3d4e5f6071",
+    "schema_version": "1.0",
+    "ts": "2026-07-06T10:06:00Z"
+  },
+  {
+    "event_id": "00000008-0000-4000-8000-000000000008",
+    "session_id": "5f3e9b2a-1c4d-4e6f-8a1b-2c3d4e5f6071",
+    "seq": 7,
+    "type": "opportunity.created",
+    "author": { "kind": "agent", "id": "agent", "model_ref": "ollama/llama3.1" },
+    "provenance": { "state": "pencil" },
+    "payload": {
+      "opportunity": { "id": "op-auto-match", "title": "Auto three-way match within tolerance", "rung": "Automate", "committed": false }
+    },
+    "causation_id": "rule-ideation-seed",
+    "correlation_id": "5f3e9b2a-1c4d-4e6f-8a1b-2c3d4e5f6071",
+    "schema_version": "1.0",
+    "ts": "2026-07-06T10:07:00Z"
+  },
+  {
+    "event_id": "00000009-0000-4000-8000-000000000009",
+    "session_id": "5f3e9b2a-1c4d-4e6f-8a1b-2c3d4e5f6071",
+    "seq": 8,
+    "type": "score.committed",
+    "author": { "kind": "human", "id": "user-1" },
+    "provenance": { "state": "ink" },
+    "payload": {
+      "opportunity_id": "op-auto-match",
+      "score": { "benefit": 4.7, "effort": 2.0 }
+    },
+    "correlation_id": "5f3e9b2a-1c4d-4e6f-8a1b-2c3d4e5f6071",
+    "schema_version": "1.0",
+    "ts": "2026-07-06T10:08:00Z"
+  },
+  {
+    "event_id": "0000000a-0000-4000-8000-00000000000a",
+    "session_id": "5f3e9b2a-1c4d-4e6f-8a1b-2c3d4e5f6071",
+    "seq": 9,
+    "type": "friction.pinned",
+    "author": { "kind": "human", "id": "user-1" },
+    "provenance": { "state": "ink", "accepted_by": null, "accepted_at": null },
+    "payload": {
+      "friction": { "id": "f2", "waste": "Motion", "node_id": "n-raise-req", "note": "re-keys the request into a second system" }
+    },
+    "causation_id": "00000007-0000-4000-8000-000000000007",
+    "correlation_id": "5f3e9b2a-1c4d-4e6f-8a1b-2c3d4e5f6071",
+    "compensates": "00000007-0000-4000-8000-000000000007",
+    "schema_version": "1.0",
+    "ts": "2026-07-06T10:09:00Z"
+  }
+]

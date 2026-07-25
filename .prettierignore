@@ -1,0 +1,32 @@
+# Build output and deps.
+**/dist/**
+**/node_modules/**
+pnpm-lock.yaml
+coverage/
+*.pnav
+
+# Reference-only prototype.
+prototypes/
+
+# Local-only tooling - never migrates to the public repo, so not worth formatting.
+.harness/
+
+# Codegen outputs (drift-gated) and the replay fixture (byte-stable for ci:replay).
+**/*.generated.ts
+core/replay-fixtures/
+
+# Markdown is left to the author's hand - Prettier reflow would churn prose and voice.
+**/*.md
+
+# Ratified documents - never auto-formatted (changes go through amendment PRs, specs/04).
+specs/
+
+# Crown-jewel artifacts + their codegen outputs + fixture corpora. These are drift-gated and
+# replay-stable; Prettier reformatting them would break ci:schema-drift / validators-drift /
+# ruleset-drift / prompt-pack-drift / replay / fixtures. Formatting here is owned by codegen.
+schema/canvas.schema.json
+schema/src/canvas.types.ts
+schema/src/validators.cjs
+schema/fixtures/
+rulesets/
+prompt-packs/

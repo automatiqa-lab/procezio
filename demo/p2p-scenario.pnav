@@ -1,0 +1,1317 @@
+{
+  "format": "pnav",
+  "version": 1,
+  "session_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+  "schema_version": "1.0",
+  "events": [
+    {
+      "session_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "type": "session.started",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "process_name": "Purchase-to-Pay",
+        "ruleset_hash": "unassigned",
+        "prompt_pack_version": "0.0.0"
+      },
+      "causation_id": null,
+      "correlation_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "f89959c6-9934-4a8e-ba82-dc78523338f9",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 1
+    },
+    {
+      "session_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "type": "frame.set",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "name": "Purchase-to-Pay",
+        "trigger": "A need is raised by the business",
+        "end_state": "The supplier is paid and the invoice is closed",
+        "owner": "Procurement and Accounts Payable",
+        "frequency": "daily",
+        "volume": "~400 invoices per month",
+        "north_star": "Invoice cycle time - days from receipt to payment"
+      },
+      "causation_id": null,
+      "correlation_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "compensates": null,
+      "schema_version": "1.1",
+      "event_id": "cd0ebe18-7f9a-4c73-890d-c82ed2fdc5e1",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 2
+    },
+    {
+      "session_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "type": "node.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "node": {
+          "id": "p2p-start",
+          "type": "Start",
+          "lane": "requester",
+          "label": "Need raised",
+          "zone": 2
+        },
+        "actor": "Requester"
+      },
+      "causation_id": null,
+      "correlation_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "b11bd626-20e9-4d85-8b62-674b2fce1b38",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 3
+    },
+    {
+      "session_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "type": "node.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "node": {
+          "id": "p2p-req",
+          "type": "Step",
+          "lane": "requester",
+          "label": "Raise requisition",
+          "zone": 2
+        },
+        "actor": "Requester"
+      },
+      "causation_id": null,
+      "correlation_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "d86108a2-6199-4cdb-aa49-df0865d4bb58",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 4
+    },
+    {
+      "session_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "type": "node.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "node": {
+          "id": "p2p-po",
+          "type": "Step",
+          "lane": "buyer",
+          "label": "Create purchase order",
+          "zone": 2
+        },
+        "actor": "Buyer"
+      },
+      "causation_id": null,
+      "correlation_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "749230dc-c872-4ef4-a5f4-37bb62d9ed2c",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 5
+    },
+    {
+      "session_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "type": "node.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "node": {
+          "id": "p2p-send",
+          "type": "Step",
+          "lane": "buyer",
+          "label": "Send PO to supplier",
+          "zone": 2
+        },
+        "actor": "Buyer"
+      },
+      "causation_id": null,
+      "correlation_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "4a311481-e6a1-4f52-af98-6429e4ea3eba",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 6
+    },
+    {
+      "session_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "type": "node.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "node": {
+          "id": "p2p-gr",
+          "type": "Step",
+          "lane": "requester",
+          "label": "Receive goods (GR)",
+          "zone": 2
+        },
+        "actor": "Requester"
+      },
+      "causation_id": null,
+      "correlation_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "a1a50fe3-b2af-4aec-9456-504457865ff4",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 7
+    },
+    {
+      "session_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "type": "node.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "node": {
+          "id": "p2p-inv",
+          "type": "Step",
+          "lane": "ap-clerk",
+          "label": "Receive invoice",
+          "zone": 2
+        },
+        "actor": "AP clerk"
+      },
+      "causation_id": null,
+      "correlation_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "bc6747e0-7dc9-4fb1-aa71-eee5b5ad7c23",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 8
+    },
+    {
+      "session_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "type": "node.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "node": {
+          "id": "p2p-match",
+          "type": "Step",
+          "lane": "ap-clerk",
+          "label": "Three-way match",
+          "zone": 2
+        },
+        "actor": "AP clerk"
+      },
+      "causation_id": null,
+      "correlation_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "b30e1b5d-c30e-4d18-9fb0-5877d74c6650",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 9
+    },
+    {
+      "session_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "type": "node.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "node": {
+          "id": "p2p-ok",
+          "type": "Decision",
+          "lane": "ap-clerk",
+          "label": "Match OK?",
+          "zone": 2
+        },
+        "actor": "AP clerk"
+      },
+      "causation_id": null,
+      "correlation_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "cbee2d79-0a32-4f4a-bd06-304423b570ef",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 10
+    },
+    {
+      "session_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "type": "node.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "node": {
+          "id": "p2p-chase",
+          "type": "Wait",
+          "lane": "ap-clerk",
+          "label": "Chase discrepancy",
+          "zone": 2
+        },
+        "actor": "AP clerk"
+      },
+      "causation_id": null,
+      "correlation_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "4ae65cc6-d029-419a-a055-4efe63bad64e",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 11
+    },
+    {
+      "session_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "type": "node.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "node": {
+          "id": "p2p-approve",
+          "type": "Step",
+          "lane": "approver",
+          "label": "Approve payment",
+          "zone": 2
+        },
+        "actor": "Approver"
+      },
+      "causation_id": null,
+      "correlation_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "750f3431-f46e-46d8-980a-7c095dfe54cf",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 12
+    },
+    {
+      "session_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "type": "node.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "node": {
+          "id": "p2p-end",
+          "type": "End",
+          "lane": "ap-clerk",
+          "label": "Supplier paid",
+          "zone": 2
+        },
+        "actor": "AP clerk"
+      },
+      "causation_id": null,
+      "correlation_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "e5c6edc8-3519-4a13-b11e-f1b4de39a8d2",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 13
+    },
+    {
+      "session_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "type": "edge.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "edge": {
+          "id": "p2p-e1",
+          "from": "p2p-start",
+          "to": "p2p-req",
+          "kind": "sequence"
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "e6261f13-2a2e-4d62-85ae-09a6556bce3b",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 14
+    },
+    {
+      "session_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "type": "edge.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "edge": {
+          "id": "p2p-e2",
+          "from": "p2p-req",
+          "to": "p2p-po",
+          "kind": "sequence"
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "9a4dad75-bd3a-4b72-a7a8-beeb4eec3dfd",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 15
+    },
+    {
+      "session_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "type": "edge.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "edge": {
+          "id": "p2p-e3",
+          "from": "p2p-po",
+          "to": "p2p-send",
+          "kind": "sequence"
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "1659f5e8-b3bf-447c-aada-f94d135a2b8b",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 16
+    },
+    {
+      "session_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "type": "edge.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "edge": {
+          "id": "p2p-e4",
+          "from": "p2p-send",
+          "to": "p2p-gr",
+          "kind": "sequence"
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "30bf4663-567e-4786-8d60-c8022c4d4493",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 17
+    },
+    {
+      "session_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "type": "edge.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "edge": {
+          "id": "p2p-e5",
+          "from": "p2p-gr",
+          "to": "p2p-inv",
+          "kind": "sequence"
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "f03800e4-9a2a-4699-80ce-b0675f1e2f57",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 18
+    },
+    {
+      "session_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "type": "edge.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "edge": {
+          "id": "p2p-e6",
+          "from": "p2p-inv",
+          "to": "p2p-match",
+          "kind": "sequence"
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "209b8cb4-3c85-4521-96f6-ae7b6bcc179f",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 19
+    },
+    {
+      "session_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "type": "edge.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "edge": {
+          "id": "p2p-e7",
+          "from": "p2p-match",
+          "to": "p2p-ok",
+          "kind": "sequence"
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "e9cbec5b-69cd-44a4-8cff-8e3ca0d5c086",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 20
+    },
+    {
+      "session_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "type": "edge.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "edge": {
+          "id": "p2p-e8",
+          "from": "p2p-ok",
+          "to": "p2p-chase",
+          "kind": "sequence",
+          "label": "no"
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "bd8f53b7-76fe-4317-89d4-a8bc8e00cafe",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 21
+    },
+    {
+      "session_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "type": "edge.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "edge": {
+          "id": "p2p-e9",
+          "from": "p2p-chase",
+          "to": "p2p-match",
+          "kind": "sequence"
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "cb3a3fc4-7ef4-4c22-9a0a-8d6be795afe4",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 22
+    },
+    {
+      "session_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "type": "edge.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "edge": {
+          "id": "p2p-e10",
+          "from": "p2p-ok",
+          "to": "p2p-approve",
+          "kind": "sequence",
+          "label": "yes"
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "2bfa4b3b-cd1b-474c-8c5d-c01319a8ea02",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 23
+    },
+    {
+      "session_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "type": "edge.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "edge": {
+          "id": "p2p-e11",
+          "from": "p2p-approve",
+          "to": "p2p-end",
+          "kind": "sequence"
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "76962775-dd79-46b9-88a5-6c25ee26275f",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 24
+    },
+    {
+      "session_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "type": "audit_tag.set",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "audit_tag": {
+          "id": "p2p-a1",
+          "node_id": "p2p-match",
+          "data": "semi-structured",
+          "rules": "mixed",
+          "exceptions": "frequent"
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "a8336d65-3874-478a-b34d-075de63ad812",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 25
+    },
+    {
+      "session_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "type": "friction.pinned",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "friction": {
+          "id": "p2p-f1",
+          "node_id": "p2p-match",
+          "waste": "Waiting",
+          "note": "Match stalls when the PO, goods receipt and invoice do not reconcile."
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "368559ae-d564-46b7-bf6c-1c82d6174b75",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 26
+    },
+    {
+      "session_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "type": "friction.pinned",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "friction": {
+          "id": "p2p-f2",
+          "node_id": "p2p-chase",
+          "waste": "Defects",
+          "note": "Discrepancies are chased by email with no shared status."
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "7c0c4e38-5450-43ba-9816-e29c74b1eb40",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 27
+    },
+    {
+      "session_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "type": "frame.set",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "pain": "Invoices sit for days waiting on a manual three-way match, and month-end is chaos.",
+        "north_star": "Cut average invoice cycle time from 3 days to 1."
+      },
+      "causation_id": null,
+      "correlation_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "compensates": null,
+      "schema_version": "1.1",
+      "event_id": "3cfb0043-05d6-4acb-9a2c-788ef68fc102",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 28
+    },
+    {
+      "session_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "type": "opportunity.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "opportunity": {
+          "id": "1fa84dec-a476-4a6e-8529-0da063b4d12b",
+          "title": "Auto-match invoices to purchase orders",
+          "target_refs": [
+            "p2p-req"
+          ]
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "3e078713-ad1a-4a65-8f9c-505d8f675f01",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 29
+    },
+    {
+      "session_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "type": "assumption.added",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "assumption": {
+          "statement": "Roughly 400 invoices flow through this process each month.",
+          "source": "AP volume report, June",
+          "confidence": "high",
+          "id": "31b4d34e-2cd3-4353-90a0-2934d5e9cf8d"
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "2c246f50-114c-4372-ae92-ca7a6bb86730",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 30
+    },
+    {
+      "session_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "type": "assumption.added",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "assumption": {
+          "statement": "About one in five invoices needs manual rework.",
+          "source": "gut feel from the AP team",
+          "confidence": "low",
+          "id": "ef31f312-5a1c-4850-ae38-21252093f7e8",
+          "verify_by": "Sample 50 invoices with the AP team and count the rework cases."
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "e985d503-b86b-423a-80d5-a321cd1e8760",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 31
+    },
+    {
+      "session_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "type": "node.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "node": {
+          "id": "p2p-req",
+          "type": "Step",
+          "lane": "requester",
+          "label": "Raise requisition",
+          "zone": 2,
+          "step_detail": {
+            "touch_time": {
+              "value": "~20 min",
+              "confidence": "log-checked"
+            }
+          }
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "469f25ea-8e0b-473e-991b-b4c6289fd073",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 32
+    },
+    {
+      "session_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "type": "node.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "node": {
+          "id": "p2p-po",
+          "type": "Step",
+          "lane": "buyer",
+          "label": "Create purchase order",
+          "zone": 2,
+          "step_detail": {
+            "touch_time": {
+              "value": "~10 min",
+              "confidence": "log-checked"
+            }
+          }
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "c0b7f49e-8d06-460f-aac2-5b709e44674e",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 33
+    },
+    {
+      "session_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "type": "node.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "node": {
+          "id": "p2p-chase",
+          "type": "Wait",
+          "lane": "ap-clerk",
+          "label": "Chase discrepancy",
+          "zone": 2,
+          "wait_detail": {
+            "duration": {
+              "value": "~2 days",
+              "confidence": "gut-feel"
+            }
+          }
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "abe44682-393e-4910-9c89-07626d909ed0",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 34
+    },
+    {
+      "session_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "type": "opportunity.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "opportunity": {
+          "id": "1fa84dec-a476-4a6e-8529-0da063b4d12b",
+          "title": "Auto-match invoices to purchase orders",
+          "target_refs": [
+            "p2p-req"
+          ],
+          "triage": "Now",
+          "rung": "Automate",
+          "triage_reason": "Biggest rework driver, and the data is already in the ERP - fastest honest win."
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "201cefcf-cfa2-4a0c-a7df-ace10990ab90",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 35
+    },
+    {
+      "session_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "type": "opportunity.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "opportunity": {
+          "id": "f6dbc9bf-3bf5-4fb3-bce4-eda76c3e86e0",
+          "title": "Vendor portal for invoice status self-service"
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "f0994c39-ba50-4627-bdb4-51c6f743bdb0",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 36
+    },
+    {
+      "session_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "type": "opportunity.created",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "opportunity": {
+          "id": "f6dbc9bf-3bf5-4fb3-bce4-eda76c3e86e0",
+          "title": "Vendor portal for invoice status self-service",
+          "triage": "Maybe",
+          "triage_reason": "Real pain, but needs vendor adoption - revisit after auto-match lands."
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "57498ace-f83f-4625-a0ab-3dc72b44401a",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 37
+    },
+    {
+      "session_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "type": "score.committed",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "opportunity_id": "1fa84dec-a476-4a6e-8529-0da063b4d12b",
+        "score": {
+          "benefit": 4,
+          "effort": 2
+        }
+      },
+      "causation_id": null,
+      "correlation_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "85f8b253-0b37-43e7-8922-5c2a852c2387",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 38
+    },
+    {
+      "session_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "type": "commitment",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "opportunity_ids": [
+          "1fa84dec-a476-4a6e-8529-0da063b4d12b"
+        ],
+        "signed_by": "local-user"
+      },
+      "causation_id": null,
+      "correlation_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "compensates": null,
+      "schema_version": "1.2",
+      "event_id": "678457b9-d6b0-48dd-937d-64dd10fa49b4",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 39
+    },
+    {
+      "session_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "type": "gate.checked",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "opportunity_id": "1fa84dec-a476-4a6e-8529-0da063b4d12b",
+        "check": "data-privacy",
+        "status": "cleared",
+        "finding": "Reviewed - no blocker for a pilot."
+      },
+      "causation_id": null,
+      "correlation_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "dd29991e-a49d-4a4f-b775-9e9570db7f33",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 40
+    },
+    {
+      "session_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "type": "gate.checked",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "opportunity_id": "1fa84dec-a476-4a6e-8529-0da063b4d12b",
+        "check": "regulatory-compliance",
+        "status": "cleared",
+        "finding": "Reviewed - no blocker for a pilot."
+      },
+      "causation_id": null,
+      "correlation_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "825758d6-68a0-433c-a153-402bb8f88b86",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 41
+    },
+    {
+      "session_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "type": "gate.checked",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "opportunity_id": "1fa84dec-a476-4a6e-8529-0da063b4d12b",
+        "check": "failure-blast-radius",
+        "status": "cleared",
+        "finding": "Reviewed - no blocker for a pilot."
+      },
+      "causation_id": null,
+      "correlation_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "eb0ae80a-d552-4b78-be2c-475ae833a17d",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 42
+    },
+    {
+      "session_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "type": "gate.checked",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "opportunity_id": "1fa84dec-a476-4a6e-8529-0da063b4d12b",
+        "check": "accountability",
+        "status": "cleared",
+        "finding": "Reviewed - no blocker for a pilot."
+      },
+      "causation_id": null,
+      "correlation_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "e685c87b-3ae0-4911-a96d-e0aedab5141a",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 43
+    },
+    {
+      "session_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "type": "gate.checked",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "opportunity_id": "1fa84dec-a476-4a6e-8529-0da063b4d12b",
+        "check": "change-impact-on-people",
+        "status": "cleared",
+        "finding": "Reviewed - no blocker for a pilot."
+      },
+      "causation_id": null,
+      "correlation_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "0c8dd447-6bb4-421c-bc12-9c47da95475d",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 44
+    },
+    {
+      "session_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "type": "case.drafted",
+      "author": {
+        "kind": "human",
+        "id": "local-user"
+      },
+      "provenance": {
+        "accepted_by": null,
+        "accepted_at": null,
+        "state": "ink"
+      },
+      "payload": {
+        "opportunity_id": "1fa84dec-a476-4a6e-8529-0da063b4d12b",
+        "figures": [
+          {
+            "label": "Hours saved per month on manual matching",
+            "value": "~55 h",
+            "benefit_class": "capacity-release",
+            "redeployment_owner": "AP team lead (freed hours go to exception handling)",
+            "source_ref": "p2p-f1",
+            "kind": "benefit"
+          },
+          {
+            "label": "One-off integration + config effort",
+            "value": "~15 person-days",
+            "source_ref": "p2p-req",
+            "kind": "cost"
+          }
+        ],
+        "assumptions": [
+          {
+            "statement": "400 invoices/month",
+            "source": "AP volume report, June",
+            "confidence": "high"
+          }
+        ]
+      },
+      "causation_id": null,
+      "correlation_id": "efd40566-3bb1-4e9f-abbf-c9a6325379db",
+      "compensates": null,
+      "schema_version": "1.0",
+      "event_id": "0440300b-fe64-48ac-b998-1fe13ff7697b",
+      "ts": "2026-07-12T09:00:00.000Z",
+      "seq": 45
+    }
+  ]
+}
