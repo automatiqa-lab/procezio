@@ -100,4 +100,4 @@ Apache-2.0, and meant to stay that way. Development is spec-driven: the ground r
 
 ---
 
-Procezio - Process Navigator (former working title Opportunity Canvas). Apache-2.0 · Automatiqa Lab by Aleks Sidorecs · <automate@automati.qa> · <https://www.automati.qa/>
+Procezio - Process Navigator (former working title Opportunity Canvas). Apache-2.0 · Automatiqa Lab by Aleks Sidorecs · <automate@automatiqa.io> · <https://www.automatiqa.io/>
