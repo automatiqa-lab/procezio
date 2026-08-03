@@ -1,12 +1,13 @@
 name: SBOM
 
 # Generate a CycloneDX software bill of materials from the pnpm lockfile (Syft handles
-# pnpm), so security-conscious adopters can audit the full dependency set. Runs on a
-# tagged release and on demand; the SBOM is attached as a build artifact and, on a
-# release, to the release itself.
+# pnpm), so security-conscious adopters can audit the full dependency set. On demand:
+# the SBOM comes out as a build artifact for auditing between releases.
+#
+# Release SBOMs are NOT produced here. A `release: published` trigger would never fire,
+# because releases are created by an action using the default GITHUB_TOKEN and GitHub
+# does not raise workflow events from those. release.yml builds and attaches it instead.
 on:
-  release:
-    types: [published]
   workflow_dispatch:
 
 jobs:
@@ -28,9 +29,3 @@ jobs:
         with:
           name: procezio-sbom
           path: procezio-sbom.cdx.json
-
-      - name: Attach SBOM to the release
-        if: github.event_name == 'release'
-        uses: softprops/action-gh-release@v3
-        with:
-          files: procezio-sbom.cdx.json

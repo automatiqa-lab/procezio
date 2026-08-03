@@ -1,8 +1,7 @@
 name: Release
 
-# Push a tag like v0.1.0 to cut a release: CI's Definition of Done runs, the static app is
-# built, and the bundle is attached to a GitHub release. Publishing the release then
-# triggers the SBOM workflow.
+# Push a tag like v0.5.0 to cut a release: CI's Definition of Done runs, the static app is
+# built, and the bundle plus a CycloneDX SBOM are attached to a GitHub release.
 on:
   push:
     tags:
@@ -36,8 +35,19 @@ jobs:
       - name: Package the static build
         run: tar -czf procezio-solo-${{ github.ref_name }}.tar.gz -C app/dist .
 
+      # Generated here rather than in a workflow listening for `release: published`:
+      # GitHub does not fire workflows from events raised with the default GITHUB_TOKEN,
+      # so that listener never runs and the SBOM never reaches the release.
+      - name: Generate CycloneDX SBOM (Syft)
+        uses: anchore/sbom-action@v0
+        with:
+          format: cyclonedx-json
+          output-file: procezio-sbom-${{ github.ref_name }}.cdx.json
+
       - name: Create the release
         uses: softprops/action-gh-release@v3
         with:
           generate_release_notes: true
-          files: procezio-solo-${{ github.ref_name }}.tar.gz
+          files: |
+            procezio-solo-${{ github.ref_name }}.tar.gz
+            procezio-sbom-${{ github.ref_name }}.cdx.json
