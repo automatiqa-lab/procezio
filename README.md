@@ -115,7 +115,9 @@ Apache-2.0, and meant to stay that way. Development is spec-driven: the ground r
 
 ## Layout
 
-`core/` `app/` (the implementation) · `schema/` `rulesets/` `prompt-packs/` `templates/` (the methodology as versioned artifacts) · `docs/` (threat model, worked examples) · `demo/` (ready-made scenarios)
+`core/` `app/` (the implementation) · `schema/` `rulesets/` `prompt-packs/` `templates/` `disclosure/` (the methodology and its wording, as versioned artifacts) · `scripts/` (the gate suite and its codegen) · `docs/` (threat model, worked examples) · `demo/` (ready-made scenarios) · `e2e/` (Playwright specs)
+
+Most directories carry their own `README.md` explaining what lives there and why.
 
 ---
 
