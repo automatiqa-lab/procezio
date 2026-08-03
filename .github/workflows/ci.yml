@@ -7,7 +7,7 @@ on:
 
 jobs:
   dod:
-    name: Definition of Done
+    name: Gate suite
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -26,10 +26,10 @@ jobs:
       - name: Typecheck
         run: corepack pnpm run ci:typecheck
 
-      # The whole Definition of Done in one step, so CI can never drift out of sync
+      # Every gate in one step, so CI can never drift out of sync
       # with the local `ci:all` list: adding a gate to package.json's ci:all runs it
       # here automatically. The step log names the gate command that failed. ci:all
       # chains: license, schema/validators/ruleset/prompt-pack drift, rule fixtures,
       # replay determinism, Solo security scan, then the full acceptance test suite.
-      - name: Definition of Done (full gate suite)
+      - name: Full gate suite
         run: corepack pnpm run ci:all

@@ -1,6 +1,6 @@
 name: Release
 
-# Push a tag like v0.5.0 to cut a release: CI's Definition of Done runs, the static app is
+# Push a tag like v0.5.0 to cut a release: the full gate suite runs, the static app is
 # built, and the bundle plus a CycloneDX SBOM are attached to a GitHub release.
 on:
   push:
@@ -26,7 +26,7 @@ jobs:
       - name: Install (frozen lockfile)
         run: corepack pnpm install --frozen-lockfile
 
-      - name: Definition of Done (full gate suite)
+      - name: Full gate suite
         run: corepack pnpm run ci:all
 
       - name: Build the Solo app
