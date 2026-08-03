@@ -146,3 +146,26 @@ export type {
   AuthStyle,
   SchemaValidator,
 } from './llm-client.js'
+
+// EU AI Act Art. 50 - the disclosure envelope and its per-format expressions (PNG text
+// chunks, PDF info entries, XMP) plus the visible document line. Conditional (nothing
+// drafted, nothing marked), idempotent, and it never names the model.
+export {
+  DISCLOSURE_SCHEMA,
+  DISCLOSURE_SYSTEM,
+  MODEL_RESPONSE_SCOPE,
+  envelope,
+  alreadyMarked,
+  documentLine,
+  pngTextChunks,
+  pdfInfoEntries,
+  xmp,
+} from './disclosure.js'
+export type {
+  DisclosureEnvelope,
+  DisclosureCount,
+  DisclosureIdentity,
+  DisclosureWording,
+  EnvelopeInput,
+  ReviewState,
+} from './disclosure.js'
