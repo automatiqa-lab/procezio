@@ -29,4 +29,5 @@ schema/src/canvas.types.ts
 schema/src/validators.cjs
 schema/fixtures/
 rulesets/
+disclosure/
 prompt-packs/

@@ -1,6 +1,6 @@
 # Procezio community registry
 
-Maintained by Automatiqa Lab by Aleks Sidorecs (automate@automati.qa).
+Maintained by Automatiqa Lab by Aleks Sidorecs (aleks@automatiqa.io).
 
 Three JSON indexes describe the packs Procezio (Process Navigator) can load: **templates** (starting process maps),
 **personas** (prompt-pack sections the agent wears), and **rulesets** (the versioned rules that
