@@ -2,8 +2,8 @@
 
 Thanks for your interest. Procezio is a guided automation-opportunity canvas with a
 co-working AI agent, for supply-chain and business people who write no code. It is built
-spec-first with a hard Definition of Done enforced by CI. This guide gets you productive
-and keeps the bar high.
+spec-first, and every change has to clear the same gate suite in CI. This guide gets you
+productive and keeps the bar high.
 
 ## Ground rules (the constitution)
 
@@ -26,7 +26,7 @@ A few things are non-negotiable - they define the product:
 ```sh
 corepack enable
 corepack pnpm install
-corepack pnpm run ci:all   # the full Definition of Done - run this before you push
+corepack pnpm run ci:all   # the full gate suite - run this before you push
 ```
 
 Node 20+. pnpm via corepack (no bare `pnpm` on PATH is assumed).
@@ -64,7 +64,7 @@ corepack pnpm --filter @procezio/app run build    # production build -> app/dist
 - Conventional commits (`feat:`, `fix:`, `chore:`, `docs:`, `test:`). Trunk-based, additive
   first.
 
-## Definition of Done (what CI checks)
+## What CI checks
 
 `corepack pnpm run ci:all` must be green: typecheck, license gate, schema / validators /
 ruleset / prompt-pack drift, rule fixtures, replay determinism, the Solo security scan, and
