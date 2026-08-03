@@ -1,8 +1,19 @@
 Procezio - Process Navigator
-Copyright 2026 Automatiqa Lab by Aleks Sidorecs <automate@automati.qa>
+Copyright 2026 Automatiqa Lab by Aleks Sidorecs <aleks@automatiqa.io>
 
 This product includes software developed as part of the Procezio (Process
-Navigator) project (https://www.automati.qa/). Former working title: Opportunity Canvas.
+Navigator) project (https://www.automatiqa.io/). Former working title: Opportunity Canvas.
+
+---
+
+Upstream models
+
+Procezio sends prompts to an OpenAI-compatible endpoint that you configure and hold the key
+for - a local Ollama or LM Studio instance, a hosted provider, or a proxy of your own. The
+lab does not train, fine-tune or distribute models, and is not a provider of a general-purpose
+AI model under the EU AI Act; obligations for the model itself rest with whoever provides it,
+under their own terms. Output drafted through that endpoint is marked per Article 50. See
+COMPLIANCE.md.
 
 ---
 

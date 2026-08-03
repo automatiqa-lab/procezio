@@ -1,0 +1,38 @@
+# EU AI Act Art. 50 disclosure - the authored artifact.
+#
+# Ratified per CONTRIBUTING.md: amend by PR, never by drive-by edit. The app imports a
+# GENERATED TS form (app/src/disclosure/disclosure.generated.ts) because the browser
+# cannot parse YAML under the strict Solo CSP - ci:disclosure-drift keeps the two in
+# lockstep and fails the build on drift.
+#
+# Canonical upstream: the ai-act-disclosure skill (assets/wording.yaml). Change wording
+# there first, bump its version, then propagate here on the next release.
+
+version: 1
+schema: automatiqa-disclosure/1
+system: procezio
+contact: aleks@automatiqa.io
+
+# What the model is allowed to be described as having written. Procezio's agent drafts
+# canvas items; it never decides, and the versioned rules - not the model - govern whether
+# it may act at all.
+scope:
+  - canvas_items
+
+wording:
+  # Art. 50(1). Procezio arguably clears the "obvious to a reasonably informed person"
+  # bar already: the agent is named as such throughout, the model connection state is on
+  # the topbar, and every contribution renders as pencil until a human accepts it. This
+  # line makes it explicit rather than relying on that reading.
+  session_notice: "You are working with an AI agent. It drafts; you decide what stays."
+
+  # Art. 50(2), the visible half. `{drafted}` of `{total}` canvas items, `{pending}` still
+  # unreviewed. The model is deliberately never named: Art. 50 requires disclosing THAT
+  # content is AI-generated, and Procezio's endpoint is the user's own, so printing its
+  # model id on an exported sheet would leak their local setup for no legal benefit.
+  drafted: "AI-assisted · {drafted} of {total} items drafted by the agent, accepted by the author"
+  unreviewed: "AI-assisted · {drafted} drafted by the agent · {pending} still pencil, not reviewed"
+
+  # A canvas nobody used the agent on exports exactly as it did before. The absence of a
+  # marking has to stay a truthful claim, which is what lets a reader trust its presence.
+  none: ""

@@ -7,6 +7,25 @@ All notable changes to Procezio are recorded here. The format is based on
 
 ## [Unreleased]
 
+### Added - EU AI Act Article 50 disclosure
+
+Exports now disclose agent-drafted content in two channels, and only when there is something to
+disclose.
+
+- **Conditional marking.** A canvas the agent never touched exports exactly as before: no line, no
+  metadata. Counts come from the two-ink provenance the store already projects, so nothing new is
+  tracked and an item born pencil is by definition agent-written.
+- **Visible line** under the sheet footer: drafted-and-accepted, or drafted-with-unreviewed-pencil.
+  The model is never named - Art. 50 asks what, not which, and the endpoint is the user's own.
+- **Machine-readable half:** a `/Info` dictionary and an XMP packet in the hand-written PDF (which
+  previously carried no document information at all), text chunks in the PNG, and a disclosure
+  header in `.pnav`.
+- **Ratified config.** `disclosure/disclosure.yaml` plus `ci:disclosure-drift`, which regenerates the
+  app-side module and refuses a config that would emit a line for an untouched canvas or name a
+  model in visible output.
+- `COMPLIANCE.md` records the role classification, the Annex III screening including the
+  employment near-miss, and the pencil/ink editorial-control carve-out.
+
 ### Changed - v0.4 upgrade (Wave 1, in progress on the feature branch)
 
 The product moves from a fixed 8-zone panel switcher to a **one-canvas improvement-opportunity
