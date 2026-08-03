@@ -29,4 +29,3 @@ jobs:
         with:
           name: procezio-sbom
           path: procezio-sbom.cdx.json
-
