@@ -59,7 +59,9 @@ if (typeof config.version !== 'number') fail(`${YAML_PATH}: version must be a nu
 if (config.schema !== EXPECTED_SCHEMA)
   fail(`${YAML_PATH}: schema is ${config.schema}, but the build speaks ${EXPECTED_SCHEMA}`)
 if (config.system !== EXPECTED_SYSTEM)
-  fail(`${YAML_PATH}: system is ${config.system}, but core/src/disclosure.ts says ${EXPECTED_SYSTEM}`)
+  fail(
+    `${YAML_PATH}: system is ${config.system}, but core/src/disclosure.ts says ${EXPECTED_SYSTEM}`,
+  )
 if (typeof config.contact !== 'string' || !config.contact.includes('@'))
   fail(`${YAML_PATH}: contact must be an email address`)
 if (!Array.isArray(config.scope) || config.scope.length === 0)
@@ -75,15 +77,16 @@ if (w.none !== '')
     `${YAML_PATH}: wording.none must be empty - a canvas with nothing drafted exports no line at all.`,
   )
 for (const key of ['drafted', 'unreviewed']) {
-  if (!w[key].includes('{drafted}'))
-    fail(`${YAML_PATH}: wording.${key} must interpolate {drafted}`)
+  if (!w[key].includes('{drafted}')) fail(`${YAML_PATH}: wording.${key} must interpolate {drafted}`)
 }
 if (!w.unreviewed.includes('{pending}'))
   fail(`${YAML_PATH}: wording.unreviewed must interpolate {pending}`)
 // The model is never named in visible output - see the Art. 50 notes in COMPLIANCE.md.
 for (const key of ['session_notice', 'drafted', 'unreviewed']) {
   if (/\{model\}/.test(w[key]))
-    fail(`${YAML_PATH}: wording.${key} must not interpolate {model} - visible output never names it`)
+    fail(
+      `${YAML_PATH}: wording.${key} must not interpolate {model} - visible output never names it`,
+    )
 }
 
 const identity = {
