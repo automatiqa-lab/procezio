@@ -70,6 +70,25 @@ This is enforced, not just asserted: a strict CSP with no `unsafe-eval`, model o
 
 Full reasoning and honest residual risks: [`docs/THREAT-MODEL.md`](docs/THREAT-MODEL.md) · Reporting: [`SECURITY.md`](SECURITY.md).
 
+## EU AI Act
+
+Procezio drafts with a language model, so its output carries transparency marking under Article 50.
+
+- Content the agent wrote is marked; content you wrote is not. A canvas you built by hand exports
+  exactly as it did before - no line, no metadata. Marking human work as machine-written would be a
+  false statement about provenance, and it teaches readers to ignore the marking everywhere else.
+- The marking travels in two channels: a line you can read on the sheet, and metadata a machine can
+  detect - a `/Info` dictionary and XMP packet in the PDF, text chunks in the PNG, and a header in
+  the `.pnav` session file. The schema is `automatiqa-disclosure/1`.
+- The model is never named in visible output. Article 50 asks you to disclose that content is
+  AI-generated, not which system produced it - and your endpoint is your own, so printing it on an
+  exported sheet would tell every recipient what you run locally.
+- Wording lives in `disclosure/disclosure.yaml`, a ratified artifact: it changes by amendment PR,
+  and `ci:disclosure-drift` fails the build if the generated copy drifts from it.
+
+If you circulate an exported sheet in the EU, keep the marking intact. Full classification and the
+Annex III screening: [COMPLIANCE.md](COMPLIANCE.md).
+
 ## Browser support
 
 Solo targets modern evergreen browsers (Chrome/Edge, Firefox, Safari). One capability degrades gracefully:
