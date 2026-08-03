@@ -10,7 +10,7 @@ Please report privately - do not open a public issue for a security problem.
 
 - Preferred: open a private advisory via GitHub Security Advisories ("Report a
   vulnerability" on the Security tab).
-- Or email **automate@automati.qa** with the details.
+- Or email **aleks@automatiqa.io** with the details.
 
 Include what you found, how to reproduce it, the impact, and any suggested fix. If you
 have a proof of concept, attach it.

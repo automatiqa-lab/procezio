@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "license": "Apache-2.0",
-  "author": "Automatiqa Lab by Aleks Sidorecs <automate@automati.qa>",
+  "author": "Automatiqa Lab by Aleks Sidorecs <aleks@automatiqa.io>",
   "type": "module",
   "scripts": {
     "typecheck": "tsc -p tsconfig.json",

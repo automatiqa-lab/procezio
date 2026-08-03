@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "description": "Procezio - Process Navigator: a guided improvement-opportunity canvas with a co-working AI agent.",
-  "author": "Automatiqa Lab by Aleks Sidorecs <automate@automati.qa>",
+  "author": "Automatiqa Lab by Aleks Sidorecs <aleks@automatiqa.io>",
   "license": "Apache-2.0",
   "packageManager": "pnpm@10.4.1",
   "engines": {
