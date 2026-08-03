@@ -71,7 +71,7 @@ function canvasToBlob(canvas: HTMLCanvasElement, type: string, quality?: number)
 }
 
 /** Escape a value for a PDF literal string - the delimiters would otherwise break the dict. */
-const pdfText = (s: string): string => s.replace(/([\\\\()])/g, '\\$1')
+export const pdfText = (s: string): string => s.replace(/([\\()])/g, '\\$1')
 
 const ascii = (s: string): Uint8Array => {
   const out = new Uint8Array(s.length)
