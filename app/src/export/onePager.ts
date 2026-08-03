@@ -17,6 +17,8 @@ import {
 } from '@procezio/core'
 import type { Provenance } from '@procezio/schema'
 import { sourceOptions } from '../case/events.js'
+import { countDrafted, documentLine } from '@procezio/core'
+import { DISCLOSURE_WORDING } from '../disclosure/disclosure.generated.js'
 import { DOWNTIME_LABELS } from '../friction/events.js'
 import { GATE_CHECKS } from '../gate/events.js'
 import { clearedChecks } from '../case/model.js'
@@ -65,6 +67,24 @@ function esc(s: string): string {
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
+}
+
+/**
+ * The EU AI Act Art. 50 line, sitting under the "made with Procezio" footer. Conditional
+ * by construction: a canvas the agent never touched exports exactly as it did before, so
+ * the ABSENCE of this line stays a truthful claim. The model is never named - Art. 50
+ * asks for disclosure THAT content is AI-generated, and the endpoint is the user's own.
+ */
+function disclosureLine(
+  pad: number,
+  height: number,
+  muted: string,
+  provenance?: ReadonlyMap<string, Provenance>,
+): string[] {
+  const counts = countDrafted(provenance)
+  const text = documentLine(counts, DISCLOSURE_WORDING, counts.pending)
+  if (text === '') return []
+  return [`<text x="${pad}" y="${height - 16}" font-size="11" fill="${muted}">${esc(text)}</text>`]
 }
 
 /** Truncate to a rough character budget so a long label cannot overflow the sheet. */
@@ -459,6 +479,7 @@ export function composeOnePagerSvg(
   line.push(
     `<text x="${pad}" y="${height - 34}" font-size="13" fill="${muted}">${L.footer} L${m.credibility.level}</text>`,
   )
+  line.push(...disclosureLine(pad, height, muted, provenance))
   line.push(`</svg>`)
   return line.join('\n')
 }
@@ -516,6 +537,7 @@ export function composeFrictionMapSvg(
   line.push(
     `<text x="${pad}" y="${height - 34}" font-size="13" fill="${muted}">${L.footer} L${credibilityLadder(canvas, provenance).level}</text>`,
   )
+  line.push(...disclosureLine(pad, height, muted, provenance))
   line.push(`</svg>`)
   return line.join('\n')
 }

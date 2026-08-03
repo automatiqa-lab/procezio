@@ -160,3 +160,50 @@ export function xmp(env: DisclosureEnvelope | null): string {
     '</x:xmpmeta>',
   ].join('\n')
 }
+
+/**
+ * How much of a canvas the agent wrote, read from the two-ink provenance map that the
+ * store already projects (provenanceOf). Nothing new is tracked: birth state IS the
+ * record, because the event store derives it from author.kind and no code path can mark
+ * an agent event ink at birth.
+ *
+ *   - born pencil, still pencil  -> agent drafted it, nobody has reviewed it
+ *   - born pencil, now ink       -> agent drafted it, a human accepted it (accepted_by)
+ *   - born ink, no accepted_by   -> a human wrote it, and it is never counted here
+ */
+export interface ProvenanceLike {
+  readonly state: 'ink' | 'pencil'
+  readonly accepted_by?: string | null
+}
+
+export interface DraftedCounts extends DisclosureCount {
+  readonly items_drafted: number
+  readonly items_total: number
+  /** Agent-drafted items still awaiting a human decision. */
+  readonly pending: number
+}
+
+export function countDrafted(
+  provenance: ReadonlyMap<string, ProvenanceLike> | undefined,
+): DraftedCounts {
+  if (provenance === undefined) return { items_drafted: 0, items_total: 0, pending: 0 }
+  let drafted = 0
+  let pending = 0
+  for (const p of provenance.values()) {
+    const acceptedFromPencil = p.state === 'ink' && (p.accepted_by ?? null) !== null
+    if (p.state === 'pencil') {
+      drafted++
+      pending++
+    } else if (acceptedFromPencil) {
+      drafted++
+    }
+  }
+  return { items_drafted: drafted, items_total: provenance.size, pending }
+}
+
+/** The review state an envelope should carry for a given set of counts. */
+export function reviewStateOf(counts: DraftedCounts): ReviewState {
+  if (counts.items_drafted === 0) return 'none'
+  if (counts.pending === 0) return 'accepted'
+  return counts.pending === counts.items_drafted ? 'unreviewed' : 'mixed'
+}

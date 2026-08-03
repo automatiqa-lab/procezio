@@ -158,12 +158,16 @@ export {
   alreadyMarked,
   documentLine,
   pngTextChunks,
+  countDrafted,
+  reviewStateOf,
   pdfInfoEntries,
   xmp,
 } from './disclosure.js'
 export type {
   DisclosureEnvelope,
   DisclosureCount,
+  DraftedCounts,
+  ProvenanceLike,
   DisclosureIdentity,
   DisclosureWording,
   EnvelopeInput,

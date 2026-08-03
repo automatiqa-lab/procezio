@@ -16,6 +16,15 @@ import {
   ONE_PAGER_SIZES,
   type OnePagerSize,
 } from './onePager.js'
+import {
+  countDrafted,
+  envelope as disclosureEnvelope,
+  pdfInfoEntries,
+  reviewStateOf,
+  xmp,
+} from '@procezio/core'
+import type { DisclosureEnvelope } from '@procezio/core'
+import { DISCLOSURE } from '../disclosure/disclosure.generated.js'
 import { downloadBlob, filenameSlug } from './download.js'
 import type { Provenance } from '@procezio/schema'
 
@@ -61,6 +70,9 @@ function canvasToBlob(canvas: HTMLCanvasElement, type: string, quality?: number)
   })
 }
 
+/** Escape a value for a PDF literal string - the delimiters would otherwise break the dict. */
+const pdfText = (s: string): string => s.replace(/([\\\\()])/g, '\\$1')
+
 const ascii = (s: string): Uint8Array => {
   const out = new Uint8Array(s.length)
   for (let i = 0; i < s.length; i++) out[i] = s.charCodeAt(i) & 0xff
@@ -71,7 +83,12 @@ const ascii = (s: string): Uint8Array => {
  * A minimal single-page PDF embedding a JPEG (DCTDecode), hand-written - no library. The page is
  * the image scaled to fit ~A4 width in points; the content stream draws the image full-page.
  */
-function jpegToPdf(jpeg: Uint8Array, imgW: number, imgH: number): Uint8Array<ArrayBuffer> {
+function jpegToPdf(
+  jpeg: Uint8Array,
+  imgW: number,
+  imgH: number,
+  disclosure: DisclosureEnvelope | null = null,
+): Uint8Array<ArrayBuffer> {
   const pageW = 595
   const pageH = Math.round((imgH / imgW) * pageW)
   const segments: Uint8Array[] = []
@@ -86,8 +103,18 @@ function jpegToPdf(jpeg: Uint8Array, imgW: number, imgH: number): Uint8Array<Arr
     push(ascii(`${n} 0 obj\n${body}\nendobj\n`))
   }
 
+  // Art. 50(2): the marking rides in the document information dictionary and an XMP
+  // packet, so it survives conversion and is detectable without reading the page. Both
+  // objects exist only when the canvas actually contains agent-drafted content.
+  const infoEntries = pdfInfoEntries(disclosure)
+  const xmpPacket = xmp(disclosure)
+  const infoNum = infoEntries.length > 0 ? 6 : 0
+  const metaNum = xmpPacket !== '' ? (infoNum > 0 ? 7 : 6) : 0
+  const lastObj = Math.max(5, infoNum, metaNum)
+  const xrefSize = lastObj + 1
+
   push(ascii('%PDF-1.4\n'))
-  obj(1, '<< /Type /Catalog /Pages 2 0 R >>')
+  obj(1, `<< /Type /Catalog /Pages 2 0 R${metaNum > 0 ? ` /Metadata ${metaNum} 0 R` : ''} >>`)
   obj(2, '<< /Type /Pages /Kids [3 0 R] /Count 1 >>')
   obj(
     3,
@@ -105,11 +132,32 @@ function jpegToPdf(jpeg: Uint8Array, imgW: number, imgH: number): Uint8Array<Arr
   const content = `q\n${pageW} 0 0 ${pageH} 0 0 cm\n/Im0 Do\nQ\n`
   obj(5, `<< /Length ${content.length} >>\nstream\n${content}endstream`)
 
+  if (infoNum > 0) {
+    const body = infoEntries.map(([k, v]) => `/${k} (${pdfText(v)})`).join(' ')
+    obj(infoNum, `<< /Producer (Procezio) /Creator (Procezio) ${body} >>`)
+  }
+  if (metaNum > 0) {
+    // XMP as a plain unfiltered stream, so any reader can lift it out.
+    offsets[metaNum] = pos
+    push(
+      ascii(
+        `${metaNum} 0 obj\n<< /Type /Metadata /Subtype /XML /Length ${xmpPacket.length} >>\nstream\n`,
+      ),
+    )
+    push(ascii(xmpPacket))
+    push(ascii('\nendstream\nendobj\n'))
+  }
+
   const xrefPos = pos
-  let xref = `xref\n0 6\n0000000000 65535 f \n`
-  for (let n = 1; n <= 5; n++) xref += `${String(offsets[n]).padStart(10, '0')} 00000 n \n`
+  let xref = `xref\n0 ${xrefSize}\n0000000000 65535 f \n`
+  for (let n = 1; n <= lastObj; n++)
+    xref += `${String(offsets[n] ?? 0).padStart(10, '0')} 00000 n \n`
   push(ascii(xref))
-  push(ascii(`trailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n${xrefPos}\n%%EOF\n`))
+  push(
+    ascii(
+      `trailer\n<< /Size ${xrefSize} /Root 1 0 R${infoNum > 0 ? ` /Info ${infoNum} 0 R` : ''} >>\nstartxref\n${xrefPos}\n%%EOF\n`,
+    ),
+  )
 
   const total = segments.reduce((s, seg) => s + seg.length, 0)
   const out = new Uint8Array(total)
@@ -119,6 +167,22 @@ function jpegToPdf(jpeg: Uint8Array, imgW: number, imgH: number): Uint8Array<Arr
     o += seg.length
   }
   return out
+}
+
+/**
+ * The Art. 50 envelope for an export, or null when the agent wrote nothing. Counts come
+ * from the two-ink provenance the store already projects, so nothing new is tracked, and
+ * `model` is deliberately never set: the endpoint is the user's own.
+ */
+function exportDisclosure(provenance?: ReadonlyMap<string, Provenance>): DisclosureEnvelope | null {
+  const counts = countDrafted(provenance)
+  return disclosureEnvelope({
+    system: DISCLOSURE.system,
+    scope: DISCLOSURE.scope,
+    drafted: counts.items_drafted,
+    total: counts.items_total,
+    reviewState: reviewStateOf(counts),
+  })
 }
 
 /** The export filename prefix: the sluggified process name (shared plumbing, download.ts). */
@@ -142,7 +206,7 @@ export async function exportOnePager(
   if (format === 'pdf') {
     const jpegBlob = await canvasToBlob(rendered, 'image/jpeg', 0.92)
     const jpegBytes = new Uint8Array(await jpegBlob.arrayBuffer())
-    const pdf = jpegToPdf(jpegBytes, width, height)
+    const pdf = jpegToPdf(jpegBytes, width, height, exportDisclosure(provenance))
     downloadBlob(`${stamp}-one-pager.pdf`, new Blob([pdf], { type: 'application/pdf' }))
     return `${stamp}-one-pager.pdf`
   }
