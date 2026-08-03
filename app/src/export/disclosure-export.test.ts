@@ -12,6 +12,10 @@ import { countDrafted, documentLine, envelope, pdfInfoEntries, reviewStateOf } f
 import type { Provenance } from '@procezio/schema'
 
 import { DISCLOSURE, DISCLOSURE_WORDING } from '../disclosure/disclosure.generated.js'
+import { pdfText } from './render.js'
+
+/** The escape character, spelled out so the expectations below stay readable. */
+const BSLASH = String.fromCharCode(92)
 
 /** A provenance map shaped like the store's: agent items born pencil, human items ink. */
 function provenanceOf(spec: {
@@ -99,4 +103,17 @@ test('the PDF info entries a reader would look for are present and escaped', () 
   assert.equal(entries.find(([k]) => k === 'AISchemaVersion')?.[1], 'automatiqa-disclosure/1')
   // Nothing in an entry may contain an unescaped PDF string delimiter.
   for (const [, v] of entries) assert.ok(!/(?<!\\)[()]/.test(v), `unescaped delimiter in ${v}`)
+})
+
+test('PDF literal strings escape the delimiters that would break the dictionary', () => {
+  // A PDF literal string ends at an unbalanced ')', so both parens and the escape
+  // character itself have to be escaped. CodeQL caught a duplicated backslash in this
+  // character class; the behaviour it should have had is asserted here.
+  assert.equal(pdfText('plain'), 'plain')
+  assert.equal(pdfText('a(b)c'), 'a' + BSLASH + '(b' + BSLASH + ')c')
+  assert.equal(pdfText('back' + BSLASH + 'slash'), 'back' + BSLASH + BSLASH + 'slash')
+  assert.equal(
+    pdfText(BSLASH + '(' + BSLASH + ')'),
+    BSLASH + BSLASH + BSLASH + '(' + BSLASH + BSLASH + BSLASH + ')',
+  )
 })
