@@ -105,7 +105,7 @@ No feature is Chromium-*only*; where the File System Access API is absent, savin
 
 **Pre-1.0, Solo feature-complete.** Specs are ratified through v0.4; the one-canvas build is done and hardened behind the full gate suite: the deterministic core (event store, projections, compensating undo/redo/delete, rule engine, replay determinism), all eight zones on the camera canvas, map-driven autopopulation of friction/data profiles/ideas as reviewable pencil, autosave with restore, the assumption ledger with in-place acknowledgement, the credibility ladder that counts only human-confirmed evidence, live business-case redraft on input changes, and the rebuilt exports. Every claim above is covered by the unit + e2e suites this repo runs in CI.
 
-Next: hardening and the hosted Solo demo → the Collab relay → the Enterprise edition. Pre-1.0 the API and the `.pnav` format may still change between minor versions; see [`CHANGELOG.md`](CHANGELOG.md).
+Next: hardening and the hosted Solo demo → the Collab relay → the Enterprise edition. **1.0 is reserved for the MCP server and the initiatives around it**, where Procezio stops being only an app you open and becomes something other agents can call. Pre-1.0 the API and the `.pnav` format may still change between minor versions; see [`CHANGELOG.md`](CHANGELOG.md).
 
 ## Governance
 

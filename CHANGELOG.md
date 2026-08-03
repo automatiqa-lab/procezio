@@ -7,6 +7,14 @@ All notable changes to Procezio are recorded here. The format is based on
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-08-03
+
+The v0.4 spec, shipped. Release numbers and spec numbers are separate: specs are ratified to v0.4,
+and this is the fifth release of the product that implements them. **1.0 is reserved for the MCP
+server and the initiatives around it** - until then, pre-1.0 rules apply and the `.pnav` format may
+still change between minor versions.
+
+
 ### Added - EU AI Act Article 50 disclosure
 
 Exports now disclose agent-drafted content in two channels, and only when there is something to
@@ -26,10 +34,10 @@ disclose.
 - `COMPLIANCE.md` records the role classification, the Annex III screening including the
   employment near-miss, and the pencil/ink editorial-control carve-out.
 
-### Changed - v0.4 upgrade (Wave 1, in progress on the feature branch)
+### Changed - the v0.4 one-canvas upgrade (Wave 1)
 
 The product moves from a fixed 8-zone panel switcher to a **one-canvas improvement-opportunity
-canvas** (spec v0.4 consolidated). Landed so far, all additive and behind the green gate suite:
+canvas** (spec v0.4 consolidated). All additive, and behind the green gate suite:
 
 - **Schema (v1.1 -> v1.2, additive):** per-node-type detail panels (Step/Decision/Wait/Start/
   End), a four-grade confidence tag, handoff edges (medium/trigger/branch-share), nine new
