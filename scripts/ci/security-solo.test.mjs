@@ -132,9 +132,15 @@ test('fails when connect-src is widened to a non-loopback origin (csp-connect-sr
   const r = runGate(dir)
   assert.notEqual(r.status, 0, 'expected the gate to fail on a widened connect-src')
   assert.match(r.stderr, /csp-connect-src/)
-  // A literal substring check, not assert.match: an unanchored host regex is both
-  // weaker than intended here and flagged by CodeQL (js/regex/missing-regexp-anchor).
-  assert.ok(r.stderr.includes('api.example.com'), 'failure output should name the offending origin')
+  // Matched inside the gate's own message rather than as a bare host: asserting the
+  // origin appears anywhere in stderr is a weaker check, and a lone unanchored hostname
+  // reads to CodeQL as URL sanitization (js/regex/missing-regexp-anchor,
+  // js/incomplete-url-substring-sanitization) when this is only a diagnostic string.
+  assert.match(
+    r.stderr,
+    /non-loopback egress origin: https:\/\/api\.example\.com/,
+    'failure output should name the offending origin in the violation message',
+  )
 })
 
 test('the shipped loopback + placeholder connect-src entries stay green', () => {
