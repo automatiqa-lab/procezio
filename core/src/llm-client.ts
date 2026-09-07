@@ -128,6 +128,18 @@ export interface FetchTransportOptions {
 }
 
 /**
+ * Strip trailing slashes from a configured endpoint. A character scan rather than a
+ * /\/+$/ replace: that pattern retries from every start position and is quadratic on an
+ * endpoint of many slashes (CodeQL js/polynomial-redos). The endpoint is user-configured,
+ * so it counts as uncontrolled input.
+ */
+export function trimTrailingSlashes(value: string): string {
+  let end = value.length
+  while (end > 0 && value.charCodeAt(end - 1) === 47 /* '/' */) end--
+  return value.slice(0, end)
+}
+
+/**
  * The default transport: one OpenAI-compatible POST to {endpoint}/chat/completions,
  * returning choices[0].message.content. Throws on a non-2xx or a malformed body so the
  * retry/fallback logic above can react. Egress is limited to config.endpoint. Every
@@ -138,7 +150,7 @@ export interface FetchTransportOptions {
 export function createFetchTransport(options: FetchTransportOptions = {}): LlmTransport {
   const timeoutMs = options.timeoutMs ?? DEFAULT_TIMEOUT_MS
   return async (req) => {
-    const url = req.config.endpoint.replace(/\/+$/, '') + '/chat/completions'
+    const url = trimTrailingSlashes(req.config.endpoint) + '/chat/completions'
     const headers: Record<string, string> = { 'content-type': 'application/json' }
     const key = req.config.apiKey
     const style = req.config.authStyle ?? 'bearer'
@@ -202,7 +214,10 @@ export function createFetchTransport(options: FetchTransportOptions = {}): LlmTr
 
 /** Extract the first JSON object from model text (handles ```json fences and prose). */
 export function extractJson(text: string): unknown {
-  const fenced = text.match(/```(?:json)?\s*([\s\S]*?)```/i)
+  // No \s* after the language tag: it and the lazy [\s\S]*? can both match the same
+  // whitespace, so the engine tries every split point and an unterminated fence costs
+  // O(n^2) (CodeQL js/polynomial-redos). The trim below already drops that whitespace.
+  const fenced = text.match(/```(?:json)?([\s\S]*?)```/i)
   const candidate = (fenced?.[1] ?? text).trim()
   // Try the whole candidate, then the first {...} span.
   const spans = [candidate]

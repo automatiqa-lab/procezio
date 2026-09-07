@@ -81,14 +81,20 @@ const UNIT_TO_MIN: Array<{ re: RegExp; min: number }> = [
 const unitMinutes = (unit: string): number | null =>
   UNIT_TO_MIN.find((u) => u.re.test(unit))?.min ?? null
 
+// Digit and gap runs are BOUNDED rather than \d+ / \s*. Both regexes are deliberately
+// unanchored (see RANGE), so an unbounded leading repetition is retried from every start
+// position: free text of many digits then costs O(n^2), which CodeQL flags as
+// js/polynomial-redos. Nine integer digits, four decimals and eight spaces sit far beyond
+// any duration a person types into a canvas field, so the caps cost nothing real.
 // A number immediately followed by a unit: the atom every duration is built from.
-const PAIR = /(\d+(?:\.\d+)?)\s*(weeks?|wks?|days?|hours?|hrs?|minutes?|mins?|[dhm])\b/gi
+const PAIR =
+  /(\d{1,9}(?:\.\d{1,4})?)\s{0,8}(weeks?|wks?|days?|hours?|hrs?|minutes?|mins?|[dhm])\b/gi
 // A range "3-5 days" / "3 to 5 hrs": two numbers sharing one trailing unit. Deliberately
 // UNANCHORED: "about 3-5 days" must hit the same midpoint rule as "3-5 days" - with a
 // start anchor, prefix words silently demoted a range to the PAIR fallback, which counted
 // only the upper bound and inflated the estimate with no honesty flag.
 const RANGE =
-  /(\d+(?:\.\d+)?)\s*(?:-|–|to)\s*(\d+(?:\.\d+)?)\s*(weeks?|wks?|days?|hours?|hrs?|minutes?|mins?|[dhm])\b/i
+  /(\d{1,9}(?:\.\d{1,4})?)\s{0,8}(?:-|–|to)\s{0,8}(\d{1,9}(?:\.\d{1,4})?)\s{0,8}(weeks?|wks?|days?|hours?|hrs?|minutes?|mins?|[dhm])\b/i
 
 /**
  * Parse a free-text duration to minutes, or null if nothing is readable. A range ("3-5 days")

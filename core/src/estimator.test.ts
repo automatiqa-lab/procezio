@@ -163,3 +163,22 @@ test('a range with prefix text still uses the midpoint (never the upper bound)',
   )
   assert.equal(parseDuration('usually 2 to 4 hours'), 3 * 60, 'midpoint of a prefixed to-range')
 })
+
+test('parseDuration stays linear on adversarial free text (ReDoS regression)', () => {
+  // PAIR and RANGE are unanchored, so before the digit runs were bounded the engine
+  // retried from every start position: 40k digits took ~1.6s per regex. A canvas field
+  // is free text a user pastes, so that was a real stall, not a theoretical one.
+  const adversarial = '9'.repeat(40_000)
+  const started = performance.now()
+  assert.equal(parseDuration(adversarial), null, 'digits with no unit are still unreadable')
+  const elapsed = performance.now() - started
+  // Bound is deliberately loose - it is catching a return to quadratic, not micro-timing.
+  assert.ok(elapsed < 500, `parseDuration took ${elapsed.toFixed(0)}ms on 40k digits`)
+})
+
+test('bounded digit runs did not change how real durations parse', () => {
+  // The caps (9 integer digits, 4 decimals, 8 spaces) must sit beyond anything real.
+  assert.equal(parseDuration('1.25 hours'), 75, 'decimals still parse')
+  assert.equal(parseDuration('2.5-3.5 days'), 60 * 8 * 3, 'a decimal range still midpoints')
+  assert.equal(parseDuration('90     min'), 90, 'a wide gap between number and unit still parses')
+})
