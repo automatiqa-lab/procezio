@@ -17,6 +17,7 @@ import {
   createFetchTransport,
   createLlmClient,
   extractJson,
+  trimTrailingSlashes,
   type AuthStyle,
   type LlmTransport,
   type SchemaValidator,
@@ -343,4 +344,39 @@ test('a cancel pressed mid-body still stops the read and says cancelled', async 
   } finally {
     globalThis.fetch = orig
   }
+})
+
+test('extractJson and the endpoint trim stay linear on adversarial input (ReDoS regression)', () => {
+  // Both sites take uncontrolled input: extractJson reads model output, and the endpoint
+  // is typed into settings by the user. Before the fix an unterminated fence followed by
+  // 30k spaces cost ~110ms and 60k trailing slashes cost ~3.1s.
+  const unterminatedFence = '```' + ' '.repeat(30_000)
+  let started = performance.now()
+  assert.throws(() => extractJson(unterminatedFence), 'an unterminated fence holds no JSON')
+  let elapsed = performance.now() - started
+  assert.ok(elapsed < 500, `extractJson took ${elapsed.toFixed(0)}ms on an unterminated fence`)
+
+  // trimTrailingSlashes is timed directly rather than through the transport: driving it
+  // via fetch would time the connect failure, not the trim.
+  const slashes = 'http://x' + '/'.repeat(60_000)
+  started = performance.now()
+  assert.equal(trimTrailingSlashes(slashes), 'http://x', 'every trailing slash comes off')
+  elapsed = performance.now() - started
+  // Bound is deliberately loose - it is catching a return to quadratic, not micro-timing.
+  assert.ok(elapsed < 500, `trimTrailingSlashes took ${elapsed.toFixed(0)}ms on 60k slashes`)
+})
+
+test('trimTrailingSlashes leaves everything except trailing slashes alone', () => {
+  assert.equal(trimTrailingSlashes('http://x/v1'), 'http://x/v1', 'an inner slash survives')
+  assert.equal(trimTrailingSlashes('http://x/v1/'), 'http://x/v1')
+  assert.equal(trimTrailingSlashes('http://x/v1///'), 'http://x/v1')
+  assert.equal(trimTrailingSlashes(''), '', 'empty stays empty')
+  assert.equal(trimTrailingSlashes('///'), '', 'all slashes trims to empty')
+})
+
+test('extractJson still reads a fence with no whitespace after the language tag', () => {
+  // The \s* was dropped from the fence regex; the trim in extractJson must cover it.
+  assert.deepEqual(extractJson('```json{"a":1}```'), { a: 1 }, 'no gap after the tag')
+  assert.deepEqual(extractJson('```   \n  {"a":2}  \n```'), { a: 2 }, 'wide gap either side')
+  assert.deepEqual(extractJson('```\n{"a":3}\n```'), { a: 3 }, 'no language tag')
 })
