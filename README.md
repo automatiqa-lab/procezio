@@ -121,4 +121,4 @@ Most directories carry their own `README.md` explaining what lives there and why
 
 ---
 
-Procezio - Process Navigator (former working title Opportunity Canvas). Apache-2.0 · Automatiqa Lab by Aleks Sidorecs · <aleks@automatiqa.io> · <https://www.automatiqa.io/>
+Procezio - Process Navigator (former working title Opportunity Canvas). Apache-2.0 · Automatiqa Lab by Aleks Sidorecs · <aleks@automatiqa.io> · <https://www.automatiqa.io/process-navigator/>
