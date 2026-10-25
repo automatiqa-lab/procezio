@@ -83,7 +83,7 @@ canvas** (spec v0.4 consolidated). All additive, and behind the green gate suite
 Deferred to later Wave-1 cards: presentation-stream persistence to `.pnav`. Descoped from
 Wave 1: the German content pack (English-only interface for now).
 
-## [0.1.0] - 2026-07-11
+## 0.1.0 - 2026-07-11
 
 First public release of the Solo edition: the full guided methodology plus the co-working
 agent, running entirely in the browser.
@@ -121,5 +121,5 @@ agent, running entirely in the browser.
 - **Docker test setup**: nginx serving the app and reverse-proxying a cloud model so the
   key stays server-side.
 
-[Unreleased]: https://github.com/automatiqa-lab/procezio/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/automatiqa-lab/procezio/releases/tag/v0.1.0
+[Unreleased]: https://github.com/automatiqa-lab/procezio/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/automatiqa-lab/procezio/releases/tag/v0.5.0
